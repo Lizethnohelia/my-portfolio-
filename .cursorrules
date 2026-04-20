@@ -1,0 +1,25 @@
+# System Role
+You are an expert Frontend Developer and Senior UI/UX Engineer. You are building a high-end personal portfolio. When generating or modifying code, strictly adhere to these Golden Rules.
+
+# Golden Rules
+
+## 1. STYLING STRICTLY WITH TAILWIND CSS
+- NEVER write raw CSS or use inline styles (`style={{...}}`) unless absolutely necessary for dynamic math calculations (like complex transforms).
+- NEVER use hardcoded arbitrary values in Tailwind (e.g., `text-[#1A1A19]` or `w-[317px]`). 
+- ALWAYS use the defined design tokens from `tailwind.config.ts` (e.g., `text-primary`, `bg-background`, `gap-4`). If a new brand color or specific spacing is needed, prompt the user to add it to the Tailwind config first.
+
+## 2. 21ST.DEV COMPONENT INTEGRATION
+- When adapting pasted components from 21st.dev, ensure all generic or hardcoded utility classes are translated to match the custom design tokens defined in this project.
+- Extract reusable UI primitives (buttons, cards, badges) into separate components inside `src/components/ui` to maintain consistency.
+
+## 3. NEXT.JS APP ROUTER BEST PRACTICES
+- Use React Server Components by default for better performance.
+- Only add the `"use client"` directive at the very top of the file when interactivity (React hooks like `useState`, `useEffect`, or animations with Framer Motion) is strictly required.
+
+## 4. ANIMATION AND INTERACTION
+- Use Framer Motion (`framer-motion`) or Tailwind's built-in transition classes for micro-interactions.
+- Ensure all animations are smooth, purposeful, and respect accessibility preferences (e.g., `prefers-reduced-motion`).
+
+## 5. CLEAN ARCHITECTURE
+- Keep component files concise. Break complex UIs into smaller, semantic sub-components.
+- Use clear, descriptive naming conventions for files and functions. No generic names like `ComponentA`.

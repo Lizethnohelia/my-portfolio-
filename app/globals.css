@@ -1,26 +1,230 @@
 @import "tailwindcss";
+@plugin "tailwindcss-animate";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/**
+ * Tipografía — Manrope: títulos (--font-manrope). Open Sans: cuerpo (--font-open-sans).
+ * Peso cuerpo: --font-weight-body (regular 400 por defecto).
+ * Mono: --font-geist-mono.
+ */
+@layer base {
+  :root {
+    --font-family-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif,
+      "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --font-family-body: var(--font-open-sans), ui-sans-serif, system-ui, sans-serif,
+      "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --font-weight-body: 400;
+    --font-weight-bold: 700;
+    /* Separadores tipo tabla (Experience): más finos que border por defecto (1px) */
+    --border-width-table-row: 0.5px;
+    --font-family-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo,
+      Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  }
+ 
 }
 
-@theme inline {
+@theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-surface: var(--surface);
+  --color-border: var(--border);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted);
+  --color-gray: var(--gray);
+
+  --color-popover: var(--surface);
+  --color-popover-foreground: var(--foreground);
+  --color-accent: var(--surface);
+  --color-accent-foreground: var(--foreground);
+  --color-secondary: var(--surface);
+  --color-secondary-foreground: var(--foreground);
+  --color-destructive: #dc2626;
+  --color-destructive-foreground: #ffffff;
+  --color-ring: var(--primary);
+  --color-input: var(--border);
+
+  --font-sans: var(--font-family-sans);
+  --font-mono: var(--font-family-mono);
+
+  /* Escala modular fluida (clamp: mínimo legible móvil → máximo escritorio) */
+  --text-heading-1: clamp(1.75rem, 4vw + 1rem, 5.6rem);
+  --text-heading-1--line-height: 1.15;
+  --text-heading-1--letter-spacing: -0.022em;
+
+  --text-heading-2: clamp(1.5rem, 3.2vw + 0.85rem, 3.2rem);
+  --text-heading-2--line-height: 1.15;
+  --text-heading-2--letter-spacing: -0.022em;
+
+  --text-heading-3: clamp(1.375rem, 2.6vw + 0.75rem, 2.074rem);
+  --text-heading-3--line-height: 1.15;
+  --text-heading-3--letter-spacing: -0.022em;
+
+  --text-heading-4: clamp(1.25rem, 2vw + 0.65rem, 1.728rem);
+  --text-heading-4--line-height: 1.15;
+  --text-heading-4--letter-spacing: -0.022em;
+
+  --text-heading-5: clamp(1.0625rem, 1.4vw + 0.55rem, 1.55rem);
+  --text-heading-5--line-height: 1.45;
+  --text-heading-5--letter-spacing: -0.022em;
+
+  --text-heading-6: clamp(1rem, 1vw + 0.5rem, 1.45rem);
+  --text-heading-6--line-height: 1.15;
+  --text-heading-6--letter-spacing: -0.022em;
+
+  /* Alias semántico = h2 */
+  --text-section-title: clamp(1.5rem, 3.2vw + 0.85rem, 2.488rem);
+  --text-section-title--line-height: 1.15;
+  --text-section-title--letter-spacing: -0.022em;
+
+  /* Cuerpo: peso vía --font-weight-body + utilidades .text-body-* */
+  --text-body-md: clamp(0.9375rem, 0.35vw + 0.88rem, 1.425rem);
+  --text-body-md--line-height: 1.6;
+
+  --text-body-sm: clamp(0.8125rem, 0.25vw + 0.76rem, 1.25rem);
+  --text-body-sm--line-height: 1.55;
+
+  --text-body-xs: clamp(0.625rem, 0.2vw + 0.58rem, 1rem);
+  --text-body-xs--line-height: 1.5;
+
+  --radius-xs: 0.25rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
+  --radius-2xl: 1.5rem;
+  --radius-3xl: 2rem;
+  --radius-full: 9999px;
+
+  --shadow-elevation-xs: 0 1px 2px 0 rgb(0 0 0 / 0.03);
+  --shadow-elevation-sm: 0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.06);
+  --shadow-elevation-md: 0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.07);
+  --shadow-elevation-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.08);
+  --shadow-elevation-xl: 0 20px 25px -5px rgb(0 0 0 / 0.08), 0 8px 10px -6px rgb(0 0 0 / 0.08);
+  --shadow-elevation-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.15);
+
+  /* Franja de footer: siempre contraste alto (no usar bg-foreground + text-primary-foreground en dark) */
+  --color-footer-surface: var(--footer-surface);
+  --color-footer-text: var(--footer-text);
+  --color-footer-text-muted: var(--footer-text-muted);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Utilidades de tipo explícitas (Tailwind v4 + @theme: asegura font-size / lh en build) */
+@layer utilities {
+  .text-heading-1 {
+    font-family: var(--font-family-sans);
+    font-size: var(--text-heading-1);
+    line-height: var(--text-heading-1--line-height);
+    letter-spacing: var(--text-heading-1--letter-spacing);
+  }
+  .text-heading-2 {
+    font-family: var(--font-family-sans);
+    font-size: var(--text-heading-2);
+    line-height: var(--text-heading-2--line-height);
+    letter-spacing: var(--text-heading-2--letter-spacing);
+  }
+  .text-heading-3 {
+    font-family: var(--font-family-sans);
+    font-size: var(--text-heading-3);
+    line-height: var(--text-heading-3--line-height);
+    letter-spacing: var(--text-heading-3--letter-spacing);
+  }
+  .text-heading-4 {
+    font-family: var(--font-family-sans);
+    font-size: var(--text-heading-4);
+    line-height: var(--text-heading-4--line-height);
+    letter-spacing: var(--text-heading-4--letter-spacing);
+  }
+  .text-heading-5 {
+    font-family: var(--font-family-sans);
+    font-size: var(--text-heading-5);
+    line-height: var(--text-heading-5--line-height);
+    letter-spacing: var(--text-heading-5--letter-spacing);
+  }
+  .text-heading-6 {
+    font-family: var(--font-family-sans);
+    font-size: var(--text-heading-6);
+    line-height: var(--text-heading-6--line-height);
+    letter-spacing: var(--text-heading-6--letter-spacing);
+  }
+  .text-section-title {
+    font-family: var(--font-family-sans);
+    font-size: var(--text-section-title);
+    line-height: var(--text-section-title--line-height);
+    letter-spacing: var(--text-section-title--letter-spacing);
+  }
+  .text-body-md {
+    font-family: var(--font-family-body);
+    font-size: var(--text-body-md);
+    line-height: var(--text-body-md--line-height);
+    font-weight: var(--font-weight-body);
+  }
+  .text-body-sm {
+    font-family: var(--font-family-body);
+    font-size: var(--text-body-sm);
+    line-height: var(--text-body-sm--line-height);
+    font-weight: var(--font-weight-body);
+  }
+  .text-body-xs {
+    font-family: var(--font-family-body);
+    font-size: var(--text-body-xs);
+    line-height: var(--text-body-xs--line-height);
+    font-weight: var(--font-weight-body);
+  }
+
+  .border-b-table-row {
+    border-bottom-width: var(--border-width-table-row);
+    border-bottom-style: solid;
+    border-bottom-color: var(--gray);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  :root {
+    --background: #ffffff;
+    --foreground: #1a1a1a;
+    --footer-surface: #222222;
+    --footer-text: #fafafa;
+    --footer-text-muted: color-mix(in oklab, var(--footer-text) 72%, transparent);
+    --primary: #ff2d55;
+    --primary-foreground: #ffffff;
+    --surface: #f4f4f5;
+    --border: #e4e4e7;
+    --muted: #71717a;
+    --gray: #74747e;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --background: #09090b;
+      --foreground: #fafafa;
+      --primary: #ff4d6f;
+      --primary-foreground: #ffffff;
+      --surface: #18181b;
+      --border: #27272a;
+      --muted: #a1a1aa;
+      --gray: #71717f;
+      --footer-surface: #0a0a0b;
+      --footer-text: #fafafa;
+      --footer-text-muted: color-mix(in oklab, var(--footer-text) 70%, transparent);
+    }
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-family-body);
+    font-weight: var(--font-weight-body);
+    line-height: 1.6;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-family-sans);
+    font-weight: 400;
+  }
 }
