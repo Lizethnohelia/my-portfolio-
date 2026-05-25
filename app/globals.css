@@ -18,6 +18,10 @@
     --border-width-table-row: 0.5px;
     --font-family-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo,
       Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    /* Detalle proyecto: títulos de sección 32px (no usar clase text-* para tamaño: tailwind-merge la quita junto a text-foreground / text-footer-text) */
+    --case-study-title-size: 2rem;
+    --case-study-title-leading: 1.2;
+    --case-study-title-tracking: -0.022em;
   }
  
 }
@@ -32,6 +36,14 @@
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted);
   --color-gray: var(--gray);
+  --color-gray-lighter: var(--gray-lighter);
+  --color-cinema: var(--cinema);
+  --color-cinema-foreground: var(--cinema-foreground);
+  --color-cinema-muted: var(--cinema-muted);
+  /** Borde para láminas research en The Challenge (Prima): --gray-lighter (#b6b6bd). */
+  --color-case-study-research-frame: var(--case-study-research-frame-border);
+  --color-bento-lime: var(--bento-lime);
+  --color-bento-yellow: var(--bento-yellow);
 
   --color-popover: var(--surface);
   --color-popover-foreground: var(--foreground);
@@ -103,6 +115,61 @@
   --shadow-elevation-xl: 0 20px 25px -5px rgb(0 0 0 / 0.08), 0 8px 10px -6px rgb(0 0 0 / 0.08);
   --shadow-elevation-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.15);
 
+  /* Case study: capturas mín. altura viewport lógico iPhone 14 (844px); ancho lógico iPhone 14 (390px); marco MacBook Air 1280×832 */
+  --min-height-case-study-capture: 52.75rem;
+  --width-case-study-phone: 24.375rem;
+  --width-case-study-macbook: 80rem;
+  /** Ancho máximo del marco MacBook respecto al contenedor (móvil/tablet). */
+  --width-case-study-macbook-fluid: min(100%, var(--width-case-study-macbook));
+  --min-height-case-study-macbook: 52rem;
+  /** Product preview Prima: alto viewport fluido en móvil, techo en desktop. */
+  --max-height-case-study-macbook-product-preview: clamp(
+    12rem,
+    52vh,
+    calc(var(--min-height-case-study-macbook) * 0.7 * 1.2)
+  );
+  --height-case-study-macbook-product-preview: clamp(
+    12rem,
+    52vh,
+    calc(var(--min-height-case-study-macbook) * 0.7 * 1.2)
+  );
+  /** Hero Prima (legacy): alto fijo 70% del marco MacBook. */
+  --max-height-case-study-hero-mockup: clamp(
+    12rem,
+    48vh,
+    calc(var(--min-height-case-study-macbook) * 0.7)
+  );
+  --height-case-study-hero-mockup: clamp(
+    12rem,
+    48vh,
+    calc(var(--min-height-case-study-macbook) * 0.7)
+  );
+  /** Hero Prima (legacy fijo): solo si no se usa ratio × alto de imagen. */
+  --height-case-study-hero-mockup-viewport: clamp(14rem, 50vw, 28rem);
+  /** Prima: viewport visible = ratio × alto renderizado de la captura (60%). */
+  --ratio-case-study-prima-visible-image-height: 0.6;
+  /** Overlay "Loading" en mockups: máximo 5s (ver CASE_STUDY_MEDIA_LOADING_MAX_MS). */
+  --duration-case-study-media-loading-max: 5000ms;
+  /** Ideation / Final UI Prima: alto mínimo del viewport de cada captura (500px). */
+  --min-height-case-study-ideation-viewport: 31.25rem;
+  /** Bento design system (referencia Estrela PayJustNow): alturas de fila. */
+  --min-height-bento-row-tall: 18rem;
+  --min-height-bento-row-short: 14rem;
+  /** Product preview Prima: captura ≤ 70% MacBook y nunca más ancha que el contenedor. */
+  --width-case-study-prima-product-preview-image: min(
+    100%,
+    calc(var(--width-case-study-macbook) * 0.7)
+  );
+  --min-width-case-study-desktop: 90rem;
+  /** Prima: padding vertical de la sección de video antes del footer (60px). */
+  --spacing-case-study-product-video-y: 3.75rem;
+  /** Prima: zoom de la card en el bento (120% vía recorte, sin escalar bitmap). */
+  --inset-prima-card-image-zoom: -10%;
+  /** Prima: nombre "Prima" en hover de la card (24px / 1.5rem). */
+  --text-prima-card-title: 2rem;
+  /** Prima: copy en hover de la card (+20% respecto a body-sm). */
+  --text-prima-card-hover-body: clamp(0.975rem, 0.3vw + 0.912rem, 2rem);
+
   /* Franja de footer: siempre contraste alto (no usar bg-foreground + text-primary-foreground en dark) */
   --color-footer-surface: var(--footer-surface);
   --color-footer-text: var(--footer-text);
@@ -153,6 +220,13 @@
     line-height: var(--text-section-title--line-height);
     letter-spacing: var(--text-section-title--letter-spacing);
   }
+  /* Prefijo type- (no text-): cn()/tailwind-merge elimina otra utilidad text-* si comparten grupo con text-foreground */
+  .type-case-study-title {
+    font-family: var(--font-family-sans);
+    font-size: var(--case-study-title-size);
+    line-height: var(--case-study-title-leading);
+    letter-spacing: var(--case-study-title-tracking);
+  }
   .text-body-md {
     font-family: var(--font-family-body);
     font-size: var(--text-body-md);
@@ -177,6 +251,76 @@
     border-bottom-style: solid;
     border-bottom-color: var(--gray);
   }
+
+  .h-case-study-hero-mockup-viewport {
+    height: var(--height-case-study-hero-mockup-viewport);
+    max-height: var(--height-case-study-hero-mockup-viewport);
+  }
+
+  .w-case-study-macbook-fluid {
+    width: var(--width-case-study-macbook-fluid);
+  }
+
+  .min-w-case-study-macbook-fluid {
+    min-width: var(--width-case-study-macbook-fluid);
+  }
+
+  .w-case-study-prima-preview-img {
+    width: var(--width-case-study-prima-product-preview-image);
+    max-width: 100%;
+  }
+
+  .min-h-case-study-ideation-viewport {
+    min-height: var(--min-height-case-study-ideation-viewport);
+  }
+
+  .min-h-bento-row-tall {
+    min-height: var(--min-height-bento-row-tall);
+  }
+
+  .min-h-bento-row-short {
+    min-height: var(--min-height-bento-row-short);
+  }
+
+  .py-case-study-product-video {
+    padding-top: var(--spacing-case-study-product-video-y);
+    padding-bottom: var(--spacing-case-study-product-video-y);
+  }
+
+  .inset-prima-card-image-zoom {
+    inset: var(--inset-prima-card-image-zoom);
+  }
+
+  .text-prima-card-title {
+    font-family: var(--font-family-sans);
+    font-size: var(--text-prima-card-title);
+    line-height: var(--text-heading-6--line-height);
+    letter-spacing: var(--text-heading-6--letter-spacing);
+  }
+
+  .text-prima-card-hover-body {
+    font-family: var(--font-family-sans);
+    font-size: var(--text-prima-card-hover-body);
+    line-height: var(--text-body-sm--line-height);
+  }
+
+  /** Research Prima (The Challenge): borde más fino + color del token. */
+  .border-case-study-research-stroke {
+    border-style: solid;
+    border-width: var(--border-width-case-study-research);
+    border-color: var(--case-study-research-frame-border);
+  }
+  .border-case-study-research-stroke-dashed {
+    border-style: dashed;
+    border-width: var(--border-width-case-study-research);
+    border-color: var(--case-study-research-frame-border);
+  }
+  .ring-case-study-research-stroke {
+    box-shadow:
+      0 0 0 var(--border-width-case-study-research)
+        color-mix(in oklab, var(--case-study-research-frame-border) 30%, transparent),
+      var(--shadow-elevation-sm);
+  }
 }
 
 @layer base {
@@ -192,6 +336,18 @@
     --border: #e4e4e7;
     --muted: #71717a;
     --gray: #74747e;
+    --gray-lighter: #b6b6bd;
+    /* Bloques tipo walkthrough sobre fondo de video (siempre oscuro) */
+    --cinema: #000000;
+    --cinema-foreground: #fafafa;
+    --cinema-muted: #a1a1aa;
+    /** Marco capturas research case study (Prima): gris claro unificado. */
+    --case-study-research-frame-border: var(--gray-lighter);
+    /** Trazo del marco research (~30% más fino que 1px). */
+    --border-width-case-study-research: calc(1px * 0.7);
+    /** Bento grid (referencia Estrela — PayJustNow). */
+    --bento-lime: #DB5E57;
+    --bento-yellow: #1A1A19;
   }
 
   @media (prefers-color-scheme: dark) {

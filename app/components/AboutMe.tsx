@@ -44,10 +44,9 @@ export default function AboutMe() {
           </div>
 
           <p className="text-pretty text-body-md font-normal text-foreground">
-            Born and raised in Mexico, I&apos;ve spent the last few years
-            building my career in the United States. Currently, I work as a
-            Senior Product Designer, helping teams ship AI-powered products
-            that make a real difference.
+          Based in Colombia, I’m a Senior Product Designer collaborating with clients across the US, Mexico, and Bolivia.
+           Whether I'm tackling complex B2B systems or crafting intuitive B2C apps, my goal is to help teams ship high-performing, 
+           impactful products.
           </p>
         </motion.div>
 

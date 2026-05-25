@@ -39,3 +39,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# venv para utilidades de imagen (scripts/remove-bg.py)
+.venv-img/
+
+# Originales sin comprimir (Prima ideation, ~150MB+)
+public/projects/prima/ideation-original/
+public/projects/prima/header-original/
+public/projects/prima/product-preview-original/

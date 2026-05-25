@@ -1,7 +1,10 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
+import { PROJECTS, type Project } from "../projects/data";
+import { cn } from "@/lib/utils";
 
 const SERVICES = [
   "AI Product Design",
@@ -9,100 +12,6 @@ const SERVICES = [
   "Problem Solving",
   "UX Research",
   "Prototyping",
-];
-
-interface Project {
-  title: string;
-  category: string;
-  description: string;
-  href: string;
-  image: string;
-  colSpan: string;
-  rowSpan: string;
-  mobileOrder: number;
-}
-
-const PROJECTS: Project[] = [
-  {
-    title: "NeuralFlow",
-    category: "AI Design",
-    description: "AI-powered design workflow, reducing iteration time by 40%.",
-    href: "#",
-    image: "/projects/neuralflow.jpg",
-    colSpan: "md:col-span-2",
-    rowSpan: "md:row-span-2",
-    mobileOrder: 1,
-  },
-  {
-    title: "DataViz AI",
-    category: "Data Viz",
-    description: "Smart dashboards that cut decision-making time 3x.",
-    href: "#",
-    image: "/projects/dataviz.jpg",
-    colSpan: "",
-    rowSpan: "",
-    mobileOrder: 2,
-  },
-  {
-    title: "BrandForge",
-    category: "Generative AI",
-    description: "Generative brand identity system for tech startups.",
-    href: "#",
-    image: "/projects/autodesign.jpg",
-    colSpan: "",
-    rowSpan: "",
-    mobileOrder: 3,
-  },
-  {
-    title: "MedInsight",
-    category: "UX Research",
-    description: "AI-driven clinical data for 200+ physicians.",
-    href: "#",
-    image: "/projects/medinsight.jpg",
-    colSpan: "",
-    rowSpan: "md:row-span-2",
-    mobileOrder: 4,
-  },
-  {
-    title: "CraftPlugin",
-    category: "Dev Tools",
-    description: "Eliminated 80% of design-dev handoff errors.",
-    href: "#",
-    image: "/projects/craftplugin.jpg",
-    colSpan: "md:col-span-2",
-    rowSpan: "",
-    mobileOrder: 5,
-  },
-  {
-    title: "InsightLens",
-    category: "Analytics",
-    description: "Real-time UX analytics powered by ML.",
-    href: "#",
-    image: "/projects/insightlens.jpg",
-    colSpan: "",
-    rowSpan: "",
-    mobileOrder: 6,
-  },
-  {
-    title: "SynthUI",
-    category: "UI Generation",
-    description: "AI-generated UI components, 60% dev time saved.",
-    href: "#",
-    image: "/projects/synthui.jpg",
-    colSpan: "",
-    rowSpan: "",
-    mobileOrder: 7,
-  },
-  {
-    title: "AutoDesign QA",
-    category: "QA Automation",
-    description: "Automated design QA across 50+ screens.",
-    href: "#",
-    image: "/projects/autodesign.jpg",
-    colSpan: "",
-    rowSpan: "",
-    mobileOrder: 8,
-  },
 ];
 
 const STAGGER = {
@@ -183,8 +92,7 @@ function BentoCard({
   disableMotion: boolean;
 }) {
   return (
-    <motion.a
-      href={project.href}
+    <motion.div
       variants={BENTO_ITEM}
       whileHover={
         disableMotion
@@ -198,35 +106,63 @@ function BentoCard({
               },
             }
       }
-      className={`group relative block cursor-pointer overflow-hidden rounded-lg shadow-elevation-sm transition-shadow duration-300 hover:shadow-elevation-md ${project.colSpan} ${project.rowSpan}`}
+      className={`group relative overflow-hidden rounded-lg shadow-elevation-sm transition-shadow duration-300 hover:shadow-elevation-md ${project.gridLayout.colSpan} ${project.gridLayout.rowSpan}`}
     >
+      <Link
+        href={`/projects/${project.slug}`}
+        aria-label={`Ver el caso de estudio: ${project.title}`}
+        className="absolute inset-0 z-20 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
+      />
+
       <Image
-        src={project.image}
+        src={project.cardImage}
         alt={project.title}
         fill
-        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-        className="object-cover transition-transform duration-500 group-hover:scale-105"
+        sizes={
+          project.cardImageSizes ??
+          "(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+        }
+        quality={project.cardImageZoom ? 100 : 75}
+        priority={project.cardImageZoom}
+        className={
+          project.cardImageZoom
+            ? "inset-prima-card-image-zoom object-cover"
+            : "object-cover transition-transform duration-500 group-hover:scale-105"
+        }
       />
 
       <div className="pointer-events-none absolute inset-0 bg-foreground/0 transition-all duration-300 group-hover:bg-foreground/40" />
 
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-foreground/50 via-foreground/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
-      <div className="absolute inset-0 z-10 flex flex-col justify-between p-4 lg:p-5">
+      <div className="pointer-events-none absolute inset-0 z-10 flex flex-col justify-between p-4 lg:p-5">
         <span className="w-fit rounded-full bg-background/80 px-3 py-1 text-body-xs font-medium uppercase tracking-wider text-foreground backdrop-blur-sm">
-          {project.category}
+          {project.cardCategory}
         </span>
 
         <div className="translate-y-3 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-          <h3 className="text-heading-6 font-normal text-background">
+          <h3
+            className={cn(
+              project.cardTitleProminent
+                ? "text-prima-card-title font-bold text-primary-foreground"
+                : "text-heading-6 font-normal text-background"
+            )}
+          >
             {project.title}
           </h3>
-          <p className="mt-1 text-body-sm text-background/80">
-            {project.description}
+          <p
+            className={cn(
+              "mt-2 text-pretty leading-snug",
+              project.cardTitleProminent
+                ? "text-prima-card-hover-body text-primary-foreground"
+                : "text-body-sm text-background/90"
+            )}
+          >
+            {project.cardHoverText ?? project.description}
           </p>
         </div>
       </div>
-    </motion.a>
+    </motion.div>
   );
 }
 
@@ -235,7 +171,10 @@ export default function ProjectsGrid() {
   const noMotion = !!shouldReduce;
 
   return (
-    <section className="bg-surface px-5 py-14 sm:px-8 md:px-12 lg:px-16 lg:py-24">
+    <section
+      id="projects"
+      className="scroll-mt-24 bg-surface px-5 py-14 sm:px-8 md:px-12 lg:px-16 lg:py-24"
+    >
       <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:items-start lg:gap-8 xl:gap-12">
         <div className="lg:col-span-4 xl:col-span-3">
           <IntroCell noMotion={noMotion} />
@@ -249,8 +188,8 @@ export default function ProjectsGrid() {
           viewport={{ once: true, amount: 0.05, margin: "0px 0px 100px 0px" }}
           className="grid min-w-0 auto-rows-[200px] grid-cols-1 gap-3 md:auto-rows-[220px] md:grid-cols-3 lg:col-span-8 lg:auto-rows-[260px] xl:col-span-9"
         >
-          {PROJECTS.map((p) => (
-            <BentoCard key={p.title} project={p} disableMotion={noMotion} />
+          {PROJECTS.filter((p) => p.showInProjectsGrid !== false).map((p) => (
+            <BentoCard key={p.slug} project={p} disableMotion={noMotion} />
           ))}
         </motion.div>
       </div>

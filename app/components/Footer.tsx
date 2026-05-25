@@ -1,18 +1,15 @@
 import Link from "next/link";
 import { FooterMotionLink } from "./FooterMotionLink";
 
-const EMAIL = "mailto:hello@example.com";
-const LINKEDIN = "https://www.linkedin.com";
+const EMAIL_ADDRESS = "lizethnoheliagrafica@gmail.com";
+const EMAIL = `mailto:${EMAIL_ADDRESS}`;
+const LINKEDIN = "https://www.linkedin.com/in/lizethnohelia/";
 
 export default function Footer() {
   return (
     <footer className="border-t border-footer-text/15 bg-footer-surface px-5 py-14 sm:px-8 md:px-12 lg:px-16 lg:py-24">
       <div className="mx-auto max-w-7xl">
-        <h2 className="text-balance text-heading-6 font-normal text-footer-text">
-          Soooo, what&apos;s next
-        </h2>
-
-        <p className="mt-8 max-w-3xl text-pretty text-body-md text-footer-text-muted sm:mt-10">
+        <p className="max-w-3xl text-pretty text-body-md text-footer-text-muted">
           You can reach me using the links below
         </p>
 
@@ -20,7 +17,6 @@ export default function Footer() {
           <FooterMotionLink
             href={EMAIL}
             label="Email me"
-            external
             className="bg-footer-text text-footer-surface hover:bg-primary hover:text-primary-foreground focus-visible:ring-footer-text focus-visible:ring-offset-footer-surface"
           />
           <FooterMotionLink

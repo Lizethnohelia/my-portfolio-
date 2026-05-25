@@ -43,7 +43,8 @@ const AVATAR_POP = {
 };
 
 const HEADING_TEXT =
-  "Senior Product Designer who builds products with AI.";
+  "Senior Product Designer with 9 years of experience building scalable digital ecosystems";
+  ;
 
 function MinimalNav() {
   return (
@@ -84,7 +85,7 @@ function Greeting() {
         className="relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl lg:h-20 lg:w-20"
       >
         <Image
-          src="/avatar.jpg"
+          src="/avatar.png"
           alt="Lizeth Avendaño"
           fill
           sizes="80px"
@@ -137,14 +138,7 @@ export default function HeroSection() {
             ))}
           </motion.h1>
 
-          <motion.p
-            variants={SLIDE_DOWN}
-            className="mt-6 text-body-md text-muted lg:absolute lg:bottom-1 lg:right-0 lg:mt-0"
-          >
-            a hands-on
-            <br />
-            one 💪
-          </motion.p>
+          
         </motion.div>
 
         <motion.p
@@ -155,8 +149,7 @@ export default function HeroSection() {
           high-converting experiences for both B2B manufacturing and B2C Fintech sectors. 
           By integrating AI-powered productivity tools into my design workflow, 
           I accelerate rapid prototyping, streamline developer handoffs, 
-          and deliver user-centric solutions that drive measurable business value 
-          faster and smarter.
+          and deliver user-centric solutions that drive measurable business value faster and smarter.
 
         </motion.p>
       </motion.div>

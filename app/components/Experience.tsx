@@ -12,78 +12,43 @@ interface Role {
 
 const ROLES: Role[] = [
   {
-    year: "2012 - 2013",
-    company: "Estudio Norte",
-    titles: ["Design Intern"],
+    year: "Present",
+    company: "Prima",
+    titles: ["Freelance Senior Product Designer & UX/UI"],
     summary:
-      "Apoyo en identidad visual y piezas digitales; primer contacto con flujos de entrega en equipo creativo.",
+      "Led the end-to-end UX/UI design of a comprehensive B2B project management platform tailored for the manufacturing industry.",
   },
   {
-    year: "2013 - 2014",
-    company: "Creative Hub MX",
-    titles: ["Graphic Designer"],
+    year: "Jun 2022 – Jul 2023",
+    company: "Koban",
+    titles: ["Freelance Senior Product Designer"],
     summary:
-      "Campañas multicanal y material para retail; consolidación de criterio tipográfico y composición.",
+      "Lead the design process from idea to polished design for the KOBAN app.",
   },
   {
-    year: "2014 - 2015",
-    company: "Freelance",
-    titles: ["UI Designer"],
-    summary:
-      "Sitios y landings para pymes; prototipos en herramientas de diseño y coordinación directa con clientes.",
-  },
-  {
-    year: "2015 - 2017",
-    company: "PixelCraft Studio",
-    titles: ["UI Designer"],
-    summary:
-      "Interfaces para productos digitales B2B; componentes reutilizables y handoff con desarrollo front-end.",
-  },
-  {
-    year: "2017 - 2019",
-    company: "BrightPath Agency",
+    year: "Nov 2021 – May 2022",
+    company: "Zemoga",
     titles: ["Product Designer"],
     summary:
-      "Discovery, wireframes y diseño UI end-to-end; pruebas con usuarios y iteración basada en datos.",
+      "Enterprise B2C E-commerce: architected 8 high-level user flows and interactive prototypes for core Walmart app initiatives.",
   },
   {
-    year: "2019 - 2021",
-    company: "Various Clients",
-    titles: ["Senior Designer / Art Director"],
+    year: "May 2019 – Nov 2021",
+    company: "Banco de Bogotá",
+    titles: ["Senior Product Designer & Brand Designer"],
     summary:
-      "Dirección creativa en proyectos paralelos; sistemas visuales, pitch decks y estándares de marca.",
+      "Made usable and desirable web responsive sites such as B2C free investment loan requests, CDT requests, and B2B housing loan process, finance a purchase with a loan, and office bank services platform.",
   },
   {
-    year: "2021 - 2023",
-    company: "NovaTech",
-    titles: ["Senior Product Designer", "Design Systems Lead"],
+    year: "Aug 2017 – May 2019",
+    company: "Banco Finandina",
+    titles: ["Senior Product Designer"],
     summary:
-      "Escala de un design system en Figma; documentación, tokens y alineación con ingeniería en releases ágiles.",
-  },
-  {
-    year: "2023 - 2024",
-    company: "Synth.ai",
-    titles: ["Staff Designer"],
-    summary:
-      "Exploración de flujos asistidos por IA; prototipos de alta fidelidad y criterios de confianza en la UX.",
-  },
-  {
-    year: "2024 - 2025",
-    company: "Synth.ai",
-    titles: ["AI Product Design Lead"],
-    summary:
-      "Liderazgo de iniciativas de producto con ML; priorización con negocio y diseño de experiencias responsables.",
-  },
-  {
-    year: "2025 - Present",
-    company: "Independent",
-    titles: ["Senior Product Designer — AI Tools"],
-    summary:
-      "Consultoría y diseño hands-on para equipos que lanzan productos con IA; desde estrategia hasta entrega.",
+      "Designed digital app and web solutions for loans, accounts, and credit cards.",
   },
 ];
 
-const YEARS_IN_INDUSTRY = "14+";
+const YEARS_IN_INDUSTRY = "8+";
 
 const STAGGER = {
   hidden: {},

@@ -22,6 +22,12 @@ const config: Config = {
         border: "var(--border)",
         muted: "var(--muted)",
         gray: "var(--gray)",
+        "gray-lighter": "var(--gray-lighter)",
+        cinema: {
+          DEFAULT: "var(--cinema)",
+          foreground: "var(--cinema-foreground)",
+          muted: "var(--cinema-muted)",
+        },
       },
       keyframes: {
         drawX: {
