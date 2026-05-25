@@ -459,37 +459,37 @@ const PRIMA_CASE_STUDY: ProjectCaseStudy = {
       visuals: [
         {
           src: "/projects/prima/ideation/companies.jpg",
-          alt: "Prima ideation: companies — centralized company profiles and documentation",
+          alt: "Prima ideation: Companies — company profiles and required documentation flow.",
           width: 2400,
           height: 1505,
         },
         {
           src: "/projects/prima/ideation/collections.jpg",
-          alt: "Prima ideation: collection management dashboard",
+          alt: "Prima ideation: Collections — PO payment progress, collection cards, and status states.",
           width: 2400,
           height: 2158,
         },
         {
           src: "/projects/prima/ideation/ideation-frame-01.jpg",
-          alt: "Prima ideation: payment terms configuration flow",
+          alt: "Prima ideation: payment terms configuration flow.",
           width: 2400,
           height: 1709,
         },
         {
           src: "/projects/prima/ideation/ideation-frame-02.jpg",
-          alt: "Prima ideation: advance payment amortization workflow",
+          alt: "Prima ideation: advance payment amortization workflow.",
           width: 2400,
           height: 904,
         },
         {
           src: "/projects/prima/ideation/ideation-frame-03.jpg",
-          alt: "Prima ideation: billing cycles and subsidiaries",
+          alt: "Prima ideation: billing cycles and subsidiaries.",
           width: 2400,
           height: 1965,
         },
         {
           src: "/projects/prima/ideation/ideation-frame-04.jpg",
-          alt: "Prima ideation: invoicing and financial operations",
+          alt: "Prima ideation: invoicing and collection management operations.",
           width: 2006,
           height: 2400,
         },
