@@ -15,6 +15,15 @@ import type {
 } from "../../../data";
 import { cn } from "@/lib/utils";
 import {
+  PRIMA_CHALLENGE_INTRO_HIGHLIGHTS,
+  PRIMA_CHALLENGE_RESEARCH_HIGHLIGHTS,
+  PRIMA_OVERVIEW_HIGHLIGHTS,
+  PRIMA_TAKEAWAY_LABEL_HIGHLIGHTS,
+} from "../../../prima-case-study-highlights";
+import { CaseStudyHighlightGroup } from "@/components/case-study/CaseStudyHighlightGroup";
+import { CaseStudyHighlightedParagraph } from "./CaseStudyHighlightedParagraph";
+import { HighlightedText } from "@/components/ui/HighlightedText";
+import {
   MacbookBrowserMediaSlot,
   PRIMA_MIN_MOCKUP_VIEWPORT_HEIGHT_PX,
   PRIMA_VISIBLE_IMAGE_HEIGHT_RATIO,
@@ -568,18 +577,39 @@ function FiveImagePlaceholders({
   );
 }
 
-function ChallengeBodyText({ text }: { text: string }) {
+function ChallengeBodyText({
+  text,
+  highlights,
+}: {
+  text: string;
+  highlights?: readonly string[];
+}) {
   const paragraphs = text.split(/\n\n+/).filter((p) => p.trim().length > 0);
+  const paragraphClass =
+    "break-words text-pretty text-body-md leading-relaxed text-muted";
+
   return (
     <div className="flex flex-col gap-4">
-      {paragraphs.map((paragraph) => (
-        <p
-          key={paragraph.slice(0, 48)}
-          className="break-words text-pretty text-body-md leading-relaxed text-muted"
-        >
-          {paragraph}
-        </p>
-      ))}
+      {paragraphs.map((paragraph) => {
+        const paragraphHighlights = highlights?.filter((phrase) =>
+          paragraph.includes(phrase)
+        );
+        if (paragraphHighlights?.length) {
+          return (
+            <CaseStudyHighlightedParagraph
+              key={paragraph.slice(0, 48)}
+              text={paragraph}
+              highlights={paragraphHighlights}
+              className={paragraphClass}
+            />
+          );
+        }
+        return (
+          <p key={paragraph.slice(0, 48)} className={paragraphClass}>
+            {paragraph}
+          </p>
+        );
+      })}
     </div>
   );
 }
@@ -601,16 +631,52 @@ function ChallengeLabeledItems({
   );
 }
 
-function ChallengeBlock({ challenge }: { challenge: CaseStudyChallengeSection }) {
+function ChallengeBlock({
+  challenge,
+  useHighlightedText = false,
+}: {
+  challenge: CaseStudyChallengeSection;
+  useHighlightedText?: boolean;
+}) {
   const researchVisuals = challenge.research.visuals;
+
+  const introBody = challenge.intro ? (
+    <ChallengeBodyText
+      text={challenge.intro}
+      highlights={
+        useHighlightedText ? PRIMA_CHALLENGE_INTRO_HIGHLIGHTS : undefined
+      }
+    />
+  ) : null;
+
+  const researchBody = (
+    <ChallengeBodyText
+      text={challenge.research.body}
+      highlights={
+        useHighlightedText ? PRIMA_CHALLENGE_RESEARCH_HIGHLIGHTS : undefined
+      }
+    />
+  );
 
   return (
     <div className="flex flex-col gap-12">
-      {challenge.intro ? <ChallengeBodyText text={challenge.intro} /> : null}
+      {introBody
+        ? useHighlightedText
+          ? (
+              <CaseStudyHighlightGroup tone="on-light">
+                {introBody}
+              </CaseStudyHighlightGroup>
+            )
+          : introBody
+        : null}
 
       <div className="flex flex-col gap-4">
         <h3 className="text-left type-case-study-title font-normal text-foreground">Research</h3>
-        <ChallengeBodyText text={challenge.research.body} />
+        {useHighlightedText ? (
+          <CaseStudyHighlightGroup tone="on-light">{researchBody}</CaseStudyHighlightGroup>
+        ) : (
+          researchBody
+        )}
         {researchVisuals?.length ? (
           <div className="flex min-w-0 flex-col gap-4">
             {researchVisuals.map((item, index) => (
@@ -755,12 +821,16 @@ function ProductPreviewBlock({ preview }: { preview: CaseStudyProductPreview }) 
 function TakeawaysBlock({
   takeaways,
   hideSubheading = false,
+  useHighlightedLabels = false,
 }: {
   takeaways: CaseStudyTakeaways;
   /** Prima: el título de sección ya dice TAKEAWAYS — sin h3 duplicado. */
   hideSubheading?: boolean;
+  useHighlightedLabels?: boolean;
 }) {
   const hasNextSteps = Boolean(takeaways.nextStepPoints?.length);
+  const listItemClass =
+    "break-words pl-1 text-pretty text-body-md leading-relaxed text-muted";
 
   return (
     <div className="flex flex-col gap-14">
@@ -771,14 +841,31 @@ function TakeawaysBlock({
           </h3>
         )}
         <ul className="flex list-disc flex-col gap-6 pl-5 marker:text-foreground">
-          {takeaways.takeawayPoints.map((text, index) => (
-            <li
-              key={index}
-              className="break-words pl-1 text-pretty text-body-md leading-relaxed text-muted"
-            >
-              {text}
-            </li>
-          ))}
+          {takeaways.takeawayPoints.map((text, index) => {
+            const label = useHighlightedLabels
+              ? PRIMA_TAKEAWAY_LABEL_HIGHLIGHTS.find((phrase) =>
+                  text.startsWith(phrase)
+                )
+              : undefined;
+
+            if (label) {
+              const rest = text.slice(label.length);
+              return (
+                <li key={index} className={listItemClass}>
+                  <HighlightedText delay={index * 0.2}>
+                    {label}
+                  </HighlightedText>
+                  {rest}
+                </li>
+              );
+            }
+
+            return (
+              <li key={index} className={listItemClass}>
+                {text}
+              </li>
+            );
+          })}
         </ul>
       </div>
       {hasNextSteps ? (
@@ -842,10 +929,13 @@ function StatementSection({
 
 export function ProjectCaseStudyLayout({ project }: { project: Project }) {
   const c = project.caseStudy;
+  const isPrima = project.slug === "prima";
   const overviewParagraphs = c.overview.rightColumnText
     .split(/\n\n+/)
     .map((p) => p.trim())
     .filter(Boolean);
+  const overviewParagraphClass =
+    "break-words text-pretty text-body-md leading-relaxed text-footer-text-muted";
 
   return (
     <>
@@ -856,16 +946,33 @@ export function ProjectCaseStudyLayout({ project }: { project: Project }) {
       />
 
       <CaseStudySplitSection variant="footer" title={c.overview.title}>
-        <div className="flex flex-col gap-6">
-          {overviewParagraphs.map((paragraph, index) => (
-            <p
-              key={index}
-              className="break-words text-pretty text-body-md leading-relaxed text-footer-text-muted"
-            >
-              {paragraph}
-            </p>
-          ))}
-        </div>
+        <CaseStudyHighlightGroup
+          tone="on-dark"
+          className="flex flex-col gap-6"
+        >
+          {overviewParagraphs.map((paragraph, index) => {
+            const hasOverviewHighlight =
+              isPrima &&
+              PRIMA_OVERVIEW_HIGHLIGHTS.some((phrase) =>
+                paragraph.includes(phrase)
+              );
+            if (hasOverviewHighlight) {
+              return (
+                <CaseStudyHighlightedParagraph
+                  key={index}
+                  text={paragraph}
+                  highlights={PRIMA_OVERVIEW_HIGHLIGHTS}
+                  className={overviewParagraphClass}
+                />
+              );
+            }
+            return (
+              <p key={index} className={overviewParagraphClass}>
+                {paragraph}
+              </p>
+            );
+          })}
+        </CaseStudyHighlightGroup>
       </CaseStudySplitSection>
 
       <CaseStudySplitSection variant="footer" title={c.productPreview.title}>
@@ -878,7 +985,10 @@ export function ProjectCaseStudyLayout({ project }: { project: Project }) {
       </CaseStudySplitSection>
 
       <CaseStudySplitSection variant="surface" title={c.challenge.title}>
-        <ChallengeBlock challenge={c.challenge} />
+        <ChallengeBlock
+          challenge={c.challenge}
+          useHighlightedText={isPrima}
+        />
       </CaseStudySplitSection>
 
       <CaseStudySplitSection
@@ -918,10 +1028,17 @@ export function ProjectCaseStudyLayout({ project }: { project: Project }) {
             : "TAKEAWAYS"
         }
       >
-        <TakeawaysBlock
-          takeaways={c.takeaways}
-          hideSubheading={project.slug === "prima"}
-        />
+        {isPrima ? (
+          <CaseStudyHighlightGroup tone="on-light">
+            <TakeawaysBlock
+              takeaways={c.takeaways}
+              hideSubheading
+              useHighlightedLabels
+            />
+          </CaseStudyHighlightGroup>
+        ) : (
+          <TakeawaysBlock takeaways={c.takeaways} />
+        )}
       </CaseStudySplitSection>
 
       {c.productVideo ? (
