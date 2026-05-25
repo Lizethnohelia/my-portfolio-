@@ -188,41 +188,45 @@ function MacbookScrollViewport({
   );
 }
 
-/** Marco MacBook: scroll interno; opcional barra de navegador (Product preview / hero Prima). */
-export function MacbookBrowserMediaSlot({
-  media,
-  addressLabel = "app.prima.io",
-  browserChrome = true,
-  loadPriority = "lazy",
-  viewportHeight = "product-preview",
-  visibleImageHeightRatio,
-  minViewportHeightPx,
-  initialScrollEnd = false,
-  onFooterSurface = false,
-  mediaFit = "preview-width",
-  className,
-}: {
+type MacbookBrowserImageMedia = Extract<MacbookBrowserMedia, { kind: "image" }>;
+
+type MacbookBrowserMediaSlotProps = {
   media: MacbookBrowserMedia;
   addressLabel?: string;
   browserChrome?: boolean;
   loadPriority?: ImageLoadPriority;
   viewportHeight?: MacbookViewportHeight;
   visibleImageHeightRatio?: number;
-  /** P. ej. ideation Prima: mínimo 500px de alto visible del viewport. */
   minViewportHeightPx?: number;
-  /** Al cargar, posiciona el scroll al final del contenido. */
   initialScrollEnd?: boolean;
   onFooterSurface?: boolean;
-  /** `full-width`: captura al 100% del ancho del contenedor (Final UI Prima). */
   mediaFit?: MacbookMediaFit;
   className?: string;
+};
+
+function MacbookBrowserImageSlot({
+  media,
+  loadPriority = "lazy",
+  viewportHeight = "product-preview",
+  visibleImageHeightRatio: ratio,
+  minViewportHeightPx,
+  initialScrollEnd = false,
+  onFooterSurface = false,
+  mediaFit = "preview-width",
+}: {
+  media: MacbookBrowserImageMedia;
+  loadPriority?: ImageLoadPriority;
+  viewportHeight?: MacbookViewportHeight;
+  visibleImageHeightRatio?: number;
+  minViewportHeightPx?: number;
+  initialScrollEnd?: boolean;
+  onFooterSurface?: boolean;
+  mediaFit?: MacbookMediaFit;
 }) {
-  const ratio = visibleImageHeightRatio;
-  const imageSrc = media.kind === "image" ? media.src : "";
   const imgRef = useRef<HTMLImageElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [viewportHeightPx, setViewportHeightPx] = useState<number | null>(null);
-  const [isLoading, setIsLoading] = useState(media.kind === "image");
+  const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
 
   const measureViewport = useCallback(() => {
@@ -232,9 +236,7 @@ export function MacbookBrowserMediaSlot({
     const rendered = getRenderedImageHeight(img);
     if (rendered > 0) {
       const scaled = Math.round(rendered * ratio);
-      setViewportHeightPx(
-        Math.max(minViewportHeightPx ?? 0, scaled)
-      );
+      setViewportHeightPx(Math.max(minViewportHeightPx ?? 0, scaled));
     }
   }, [minViewportHeightPx, ratio]);
 
@@ -273,9 +275,7 @@ export function MacbookBrowserMediaSlot({
   }, [markLoaded]);
 
   useLayoutEffect(() => {
-    if (media.kind !== "image") return;
-
-    syncLoadState();
+    queueMicrotask(() => syncLoadState());
 
     if (ratio == null) return;
 
@@ -301,24 +301,15 @@ export function MacbookBrowserMediaSlot({
     };
   }, [
     applyScrollToEnd,
-    imageSrc,
     initialScrollEnd,
     measureViewport,
-    media.kind,
+    media.src,
     ratio,
     syncLoadState,
   ]);
 
   useEffect(() => {
-    if (media.kind !== "image") return;
-
-    setHasError(false);
-    setViewportHeightPx(null);
-    syncLoadState();
-  }, [imageSrc, media.kind, syncLoadState]);
-
-  useEffect(() => {
-    if (media.kind !== "image" || !isLoading || hasError) return;
+    if (!isLoading || hasError) return;
 
     const timeoutId = window.setTimeout(() => {
       setIsLoading(false);
@@ -326,23 +317,31 @@ export function MacbookBrowserMediaSlot({
     }, CASE_STUDY_MEDIA_LOADING_MAX_MS);
 
     return () => window.clearTimeout(timeoutId);
-  }, [hasError, imageSrc, isLoading, measureViewport, media.kind]);
+  }, [hasError, isLoading, measureViewport, media.src]);
 
   const lazyAttrs = imageLoadingAttrs(loadPriority);
-
   const intrinsic =
-    media.kind === "image" && media.width && media.height
+    media.width && media.height
       ? { width: media.width, height: media.height }
       : undefined;
-
   const showLoadingOverlay = isLoading && !hasError;
   const isFullWidthMedia = mediaFit === "full-width";
   const mediaSizeClass = isFullWidthMedia
     ? "w-full max-w-full"
     : "w-case-study-prima-preview-img max-w-full";
 
-  const mediaNode =
-    media.kind === "image" ? (
+  return (
+    <MacbookScrollViewport
+      viewportHeight={viewportHeight}
+      visibleImageHeightRatio={ratio}
+      measuredViewportHeightPx={viewportHeightPx}
+      minViewportHeightPx={minViewportHeightPx}
+      showLoadingOverlay={showLoadingOverlay}
+      hasError={hasError}
+      onFooterSurface={onFooterSurface}
+      scrollContainerRef={scrollContainerRef}
+      mediaFit={mediaFit}
+    >
       <img
         ref={imgRef}
         src={media.src}
@@ -357,34 +356,66 @@ export function MacbookBrowserMediaSlot({
         }}
         className={cn("block h-auto shrink-0", mediaSizeClass)}
       />
-    ) : (
-      <video
-        src={media.src}
-        poster={media.poster}
-        autoPlay
-        muted
-        loop
-        playsInline
-        aria-label={media.alt}
-        className={cn("block h-auto shrink-0", mediaSizeClass)}
-      />
-    );
-
-  const viewport = (
-    <MacbookScrollViewport
-      viewportHeight={viewportHeight}
-      visibleImageHeightRatio={ratio}
-      measuredViewportHeightPx={viewportHeightPx}
-      minViewportHeightPx={minViewportHeightPx}
-      showLoadingOverlay={showLoadingOverlay}
-      hasError={hasError}
-      onFooterSurface={onFooterSurface}
-      scrollContainerRef={scrollContainerRef}
-      mediaFit={mediaFit}
-    >
-      {mediaNode}
     </MacbookScrollViewport>
   );
+}
+
+/** Marco MacBook: scroll interno; opcional barra de navegador (Product preview / hero Prima). */
+export function MacbookBrowserMediaSlot({
+  media,
+  addressLabel = "app.prima.io",
+  browserChrome = true,
+  loadPriority = "lazy",
+  viewportHeight = "product-preview",
+  visibleImageHeightRatio,
+  minViewportHeightPx,
+  initialScrollEnd = false,
+  onFooterSurface = false,
+  mediaFit = "preview-width",
+  className,
+}: MacbookBrowserMediaSlotProps) {
+  const ratio = visibleImageHeightRatio;
+  const isFullWidthMedia = mediaFit === "full-width";
+  const mediaSizeClass = isFullWidthMedia
+    ? "w-full max-w-full"
+    : "w-case-study-prima-preview-img max-w-full";
+
+  const viewport =
+    media.kind === "image" ? (
+      <MacbookBrowserImageSlot
+        key={media.src}
+        media={media}
+        loadPriority={loadPriority}
+        viewportHeight={viewportHeight}
+        visibleImageHeightRatio={ratio}
+        minViewportHeightPx={minViewportHeightPx}
+        initialScrollEnd={initialScrollEnd}
+        onFooterSurface={onFooterSurface}
+        mediaFit={mediaFit}
+      />
+    ) : (
+      <MacbookScrollViewport
+        viewportHeight={viewportHeight}
+        visibleImageHeightRatio={ratio}
+        measuredViewportHeightPx={null}
+        minViewportHeightPx={minViewportHeightPx}
+        showLoadingOverlay={false}
+        hasError={false}
+        onFooterSurface={onFooterSurface}
+        mediaFit={mediaFit}
+      >
+        <video
+          src={media.src}
+          poster={media.poster}
+          autoPlay
+          muted
+          loop
+          playsInline
+          aria-label={media.alt}
+          className={cn("block h-auto shrink-0", mediaSizeClass)}
+        />
+      </MacbookScrollViewport>
+    );
 
   if (!browserChrome) {
     return (

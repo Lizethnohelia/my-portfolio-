@@ -21,7 +21,6 @@ import {
 } from "./MacbookBrowserMediaSlot";
 import { PrimaDesignSystemBentoGrid } from "./PrimaDesignSystemBentoGrid";
 import { CaseStudyProductVideoSection } from "./CaseStudyProductVideoSection";
-import { ProductPreviewBrowserChrome } from "./ProductPreviewBrowserChrome";
 import { ProductPreviewMacbookScroll } from "./ProductPreviewMacbookScroll";
 
 /** Contenedor del case study: ancho máximo 7xl + padding moderado. */

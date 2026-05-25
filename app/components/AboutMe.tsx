@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 
 const STAGGER = {
@@ -45,7 +44,7 @@ export default function AboutMe() {
 
           <p className="text-pretty text-body-md font-normal text-foreground">
           Based in Colombia, I’m a Senior Product Designer collaborating with clients across the US, Mexico, and Bolivia.
-           Whether I'm tackling complex B2B systems or crafting intuitive B2C apps, my goal is to help teams ship high-performing, 
+           Whether I&apos;m tackling complex B2B systems or crafting intuitive B2C apps, my goal is to help teams ship high-performing, 
            impactful products.
           </p>
         </motion.div>
