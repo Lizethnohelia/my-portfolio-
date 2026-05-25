@@ -11,6 +11,8 @@ import {
   type ReactNode,
   type RefObject,
 } from "react";
+
+const PRIMA_MOBILE_VIEWPORT_MQ = "(max-width: 767px)";
 import { cn } from "@/lib/utils";
 import { ProductPreviewBrowserChrome } from "./ProductPreviewBrowserChrome";
 
@@ -32,6 +34,20 @@ type MacbookMediaFit = "preview-width" | "full-width";
 
 /** Prima: viewport de scroll = ratio × alto renderizado de la imagen (p. ej. 0.6 = 60%). */
 const PRIMA_VISIBLE_IMAGE_HEIGHT_RATIO = 0.6;
+
+function useMobilePreviewViewport() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia(PRIMA_MOBILE_VIEWPORT_MQ);
+    const sync = () => setIsMobile(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
+  return isMobile;
+}
 
 /** Prima: alto mínimo del viewport (= --min-height-case-study-ideation-viewport, 500px). */
 const PRIMA_IDEATION_MIN_VIEWPORT_HEIGHT_PX = 500;
@@ -228,9 +244,11 @@ function MacbookBrowserImageSlot({
   const [viewportHeightPx, setViewportHeightPx] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
+  const isMobile = useMobilePreviewViewport();
+  const useIntrinsicHeightOnMobile = isMobile && ratio != null;
 
   const measureViewport = useCallback(() => {
-    if (ratio == null) return;
+    if (ratio == null || useIntrinsicHeightOnMobile) return;
     const img = imgRef.current;
     if (!img) return;
     const rendered = getRenderedImageHeight(img);
@@ -238,7 +256,7 @@ function MacbookBrowserImageSlot({
       const scaled = Math.round(rendered * ratio);
       setViewportHeightPx(Math.max(minViewportHeightPx ?? 0, scaled));
     }
-  }, [minViewportHeightPx, ratio]);
+  }, [minViewportHeightPx, ratio, useIntrinsicHeightOnMobile]);
 
   const applyScrollToEnd = useCallback(() => {
     const el = scrollContainerRef.current;
@@ -282,22 +300,32 @@ function MacbookBrowserImageSlot({
     const img = imgRef.current;
     if (!img) return;
 
-    measureViewport();
-    const ro = new ResizeObserver(() => {
+    if (!useIntrinsicHeightOnMobile) {
       measureViewport();
+    }
+
+    const ro = new ResizeObserver(() => {
+      if (!useIntrinsicHeightOnMobile) {
+        measureViewport();
+      }
       if (isImageReady(img)) {
         setIsLoading(false);
       }
-      if (initialScrollEnd) {
+      if (initialScrollEnd && !useIntrinsicHeightOnMobile) {
         applyScrollToEnd();
       }
     });
     ro.observe(img);
-    window.addEventListener("resize", measureViewport);
+    const onResize = () => {
+      if (!useIntrinsicHeightOnMobile) {
+        measureViewport();
+      }
+    };
+    window.addEventListener("resize", onResize);
 
     return () => {
       ro.disconnect();
-      window.removeEventListener("resize", measureViewport);
+      window.removeEventListener("resize", onResize);
     };
   }, [
     applyScrollToEnd,
@@ -306,6 +334,7 @@ function MacbookBrowserImageSlot({
     media.src,
     ratio,
     syncLoadState,
+    useIntrinsicHeightOnMobile,
   ]);
 
   useEffect(() => {
@@ -313,11 +342,19 @@ function MacbookBrowserImageSlot({
 
     const timeoutId = window.setTimeout(() => {
       setIsLoading(false);
-      measureViewport();
+      if (!useIntrinsicHeightOnMobile) {
+        measureViewport();
+      }
     }, CASE_STUDY_MEDIA_LOADING_MAX_MS);
 
     return () => window.clearTimeout(timeoutId);
-  }, [hasError, isLoading, measureViewport, media.src]);
+  }, [
+    hasError,
+    isLoading,
+    measureViewport,
+    media.src,
+    useIntrinsicHeightOnMobile,
+  ]);
 
   const lazyAttrs = imageLoadingAttrs(loadPriority);
   const intrinsic =
@@ -325,6 +362,40 @@ function MacbookBrowserImageSlot({
       ? { width: media.width, height: media.height }
       : undefined;
   const showLoadingOverlay = isLoading && !hasError;
+
+  if (useIntrinsicHeightOnMobile) {
+    return (
+      <div className="relative flex w-full min-w-0 max-w-full flex-col overflow-hidden bg-background">
+        {showLoadingOverlay ? (
+          <MediaLoadingOverlay onFooterSurface={onFooterSurface} />
+        ) : null}
+        {hasError ? (
+          <div className="flex min-h-48 flex-col items-center justify-center gap-2 px-6 py-10 text-center">
+            <p className="text-body-sm text-muted">No se pudo cargar la captura.</p>
+            <p className="text-body-xs text-muted">
+              Revisa la conexión o vuelve a intentar.
+            </p>
+          </div>
+        ) : (
+          <img
+            ref={imgRef}
+            src={media.src}
+            alt={media.alt}
+            decoding="async"
+            {...intrinsic}
+            {...lazyAttrs}
+            onLoad={markLoaded}
+            onError={() => {
+              setIsLoading(false);
+              setHasError(true);
+            }}
+            className="block h-auto w-full max-w-full"
+          />
+        )}
+      </div>
+    );
+  }
+
   const isFullWidthMedia = mediaFit === "full-width";
   const mediaSizeClass = isFullWidthMedia
     ? "w-full max-w-full"

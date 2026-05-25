@@ -752,15 +752,24 @@ function ProductPreviewBlock({ preview }: { preview: CaseStudyProductPreview }) 
   );
 }
 
-function TakeawaysBlock({ takeaways }: { takeaways: CaseStudyTakeaways }) {
+function TakeawaysBlock({
+  takeaways,
+  hideSubheading = false,
+}: {
+  takeaways: CaseStudyTakeaways;
+  /** Prima: el título de sección ya dice TAKEAWAYS — sin h3 duplicado. */
+  hideSubheading?: boolean;
+}) {
   const hasNextSteps = Boolean(takeaways.nextStepPoints?.length);
 
   return (
     <div className="flex flex-col gap-14">
       <div className="flex flex-col gap-4">
-        <h3 className="text-left type-case-study-title font-normal text-foreground">
-          TAKEAWAYS
-        </h3>
+        {hideSubheading ? null : (
+          <h3 className="text-left type-case-study-title font-normal text-foreground">
+            TAKEAWAYS
+          </h3>
+        )}
         <ul className="flex list-disc flex-col gap-6 pl-5 marker:text-foreground">
           {takeaways.takeawayPoints.map((text, index) => (
             <li
@@ -909,7 +918,10 @@ export function ProjectCaseStudyLayout({ project }: { project: Project }) {
             : "TAKEAWAYS"
         }
       >
-        <TakeawaysBlock takeaways={c.takeaways} />
+        <TakeawaysBlock
+          takeaways={c.takeaways}
+          hideSubheading={project.slug === "prima"}
+        />
       </CaseStudySplitSection>
 
       {c.productVideo ? (

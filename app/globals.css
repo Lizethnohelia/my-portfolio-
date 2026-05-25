@@ -152,6 +152,8 @@
   --duration-case-study-media-loading-max: 5000ms;
   /** Ideation / Final UI Prima: alto mínimo del viewport de cada captura (500px). */
   --min-height-case-study-ideation-viewport: 31.25rem;
+  /** Prima design system: logo en celda device-mockup al 50% del ancho. */
+  --width-prima-design-system-logo: 50%;
   /** Bento design system (referencia Estrela PayJustNow): alturas de fila. */
   --min-height-bento-row-tall: 18rem;
   --min-height-bento-row-short: 14rem;
@@ -272,6 +274,10 @@
 
   .min-h-case-study-ideation-viewport {
     min-height: var(--min-height-case-study-ideation-viewport);
+  }
+
+  .max-w-prima-design-system-logo {
+    max-width: var(--width-prima-design-system-logo);
   }
 
   .min-h-bento-row-tall {

@@ -110,7 +110,7 @@ function BentoCell({ cell }: { cell: CaseStudyBentoCell }) {
       return <BentoImagePlaceholder label="Asset — reemplazar en data.ts" />;
     }
     return (
-      <figure className="m-0 flex min-w-0 items-start justify-start">
+      <figure className="m-0 flex min-w-0 max-w-prima-design-system-logo items-start justify-start">
         <BentoIntrinsicImage visual={cell.deviceVisual} />
       </figure>
     );
