@@ -218,6 +218,22 @@
     line-height: var(--text-heading-6--line-height);
     letter-spacing: var(--text-heading-6--letter-spacing);
   }
+
+  .shadow-elevation-sm {
+    box-shadow: var(--shadow-elevation-sm);
+  }
+
+  .shadow-elevation-md {
+    box-shadow: var(--shadow-elevation-md);
+  }
+
+  .shadow-elevation-lg {
+    box-shadow: var(--shadow-elevation-lg);
+  }
+
+  .shadow-elevation-xl {
+    box-shadow: var(--shadow-elevation-xl);
+  }
   .text-section-title {
     font-family: var(--font-family-sans);
     font-size: var(--text-section-title);
@@ -337,47 +353,49 @@
 }
 
 /**
- * Prima case study — texto resaltado (wipe izquierda → derecha, línea a línea).
- * Colores: fondo oscuro → fill #ff4d6f + texto #fafafa; fondo claro → fill #09090b + texto #fafafa.
+ * Prima case study — wipe izquierda → derecha, líneas en orden (1 → n).
+ * Oscuro: texto #fafafa hasta el fill #ff4d6f; claro: texto #1a1a1a hasta el fill #09090b.
+ * Tras el fill: texto #fafafa.
  */
 @layer components {
+  .highlight-lines {
+    vertical-align: baseline;
+  }
+
+  .highlight-line {
+    display: block;
+  }
+
   .highlight-wipe {
-    -webkit-box-decoration-break: clone;
-    box-decoration-break: clone;
     display: inline;
     padding: 0.08em 0.18em 0.08em 0.15em;
     background-repeat: no-repeat;
     background-position: 0 50%;
     background-size: 0% 100%;
-    color: var(--prima-highlight-text-rest, var(--muted));
+    color: var(--prima-highlight-text-rest);
     background-image: linear-gradient(
-      var(--prima-highlight-fill, #09090b),
-      var(--prima-highlight-fill, #09090b)
+      var(--prima-highlight-fill),
+      var(--prima-highlight-fill)
     );
     transition:
       background-size var(--duration-highlight-wipe) var(--ease-highlight-wipe),
-      color calc(var(--duration-highlight-wipe) * 0.35) var(--ease-highlight-wipe);
+      color 0.2s var(--ease-highlight-wipe);
     transition-delay: var(--highlight-wipe-bg-delay, 0s),
       var(--highlight-wipe-text-delay, 0s);
   }
 
   [data-highlight-tone="on-dark"] {
     --prima-highlight-fill: #ff4d6f;
-    --prima-highlight-text-rest: var(--footer-text-muted);
+    --prima-highlight-text-rest: #fafafa;
   }
 
   [data-highlight-tone="on-light"] {
     --prima-highlight-fill: #09090b;
-    --prima-highlight-text-rest: var(--muted);
+    --prima-highlight-text-rest: #1a1a1a;
   }
 
   [data-highlight-active="true"] .highlight-wipe {
     background-size: 100% 100%;
-    color: #fafafa;
-  }
-
-  .text-footer-text-muted [data-highlight-active="true"] .highlight-wipe,
-  .text-muted [data-highlight-active="true"] .highlight-wipe {
     color: #fafafa;
   }
 

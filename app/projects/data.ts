@@ -289,7 +289,8 @@ export interface Project {
 const COMMON_VIDEO_POSTER = "/projects/neuralflow.jpg";
 
 const PRIMA_DESIGN_SYSTEM_DIR = "/projects/prima/design-system";
-const PRIMA_CARD_IMAGE_SRC = `/projects/prima/card/${encodeURIComponent("RFQ - Kanban view.jpg")}`;
+const PRIMA_HEADER_IMAGE_SRC = `/projects/prima/header/${encodeURIComponent("RFQ - details.jpg")}`;
+const PRIMA_CARD_IMAGE_SRC = "/projects/Prima.jpg";
 const PRIMA_PRODUCT_VIDEO_SRC = `/projects/prima/${encodeURIComponent("product video")}/prima-walkthrough.mp4`;
 
 function primaDesignSystemImage(
@@ -314,10 +315,10 @@ const PRIMA_CASE_STUDY: ProjectCaseStudy = {
       "Making manufacturing industry more efficient and eliminating financial and operational bottlenecks",
     macbookBrowserMedia: true,
     heroImage: {
-      src: "/projects/prima/header/rfq-details.jpg",
+      src: PRIMA_HEADER_IMAGE_SRC,
       alt: "Prima: RFQ project details — B2B manufacturing platform header view",
-      width: 1583,
-      height: 2400,
+      width: 1296,
+      height: 1964,
     },
     meta: [
       { label: "Role", value: "Senior Product Designer & UX/UI" },
@@ -801,10 +802,10 @@ export const PROJECTS: Project[] = [
     description:
       "End-to-end design of a project management platform for manufacturing operations.",
     cardImage: PRIMA_CARD_IMAGE_SRC,
-    cardImageZoom: true,
-    cardImageSizes: "(max-width: 768px) 100vw, (max-width: 1280px) 1200px, 1920px",
-    cardImageWidth: 6548,
-    cardImageHeight: 4772,
+    cardImageZoom: false,
+    cardImageSizes: "(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw",
+    cardImageWidth: 1296,
+    cardImageHeight: 1964,
     cardHoverText:
       "A B2B Project Management Platform for the Manufacturing Industry",
     cardTitleProminent: true,

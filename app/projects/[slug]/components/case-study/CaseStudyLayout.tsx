@@ -22,7 +22,7 @@ import {
 } from "../../../prima-case-study-highlights";
 import { CaseStudyHighlightGroup } from "@/components/case-study/CaseStudyHighlightGroup";
 import { CaseStudyHighlightedParagraph } from "./CaseStudyHighlightedParagraph";
-import { HighlightedText } from "@/components/ui/HighlightedText";
+import { PrimaLineHighlightText } from "@/components/case-study/PrimaLineHighlightText";
 import {
   MacbookBrowserMediaSlot,
   PRIMA_MIN_MOCKUP_VIEWPORT_HEIGHT_PX,
@@ -852,9 +852,10 @@ function TakeawaysBlock({
               const rest = text.slice(label.length);
               return (
                 <li key={index} className={listItemClass}>
-                  <HighlightedText delay={index * 0.2}>
-                    {label}
-                  </HighlightedText>
+                  <PrimaLineHighlightText
+                    text={label}
+                    phraseDelay={index * 1.15}
+                  />
                   {rest}
                 </li>
               );

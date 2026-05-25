@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 interface Role {
   year: string;
@@ -49,6 +50,14 @@ const ROLES: Role[] = [
 ];
 
 const YEARS_IN_INDUSTRY = "8+";
+
+/** Labels de columna en móvil: mismo tamaño que la descripción + mayúsculas sostenidas. */
+const EXPERIENCE_MOBILE_COLUMN_LABEL =
+  "text-body-sm uppercase tracking-wider text-muted md:hidden";
+
+/** Year y títulos de rol: heading-5 en móvil (≥ body-sm), heading-6 desde md. */
+const EXPERIENCE_YEAR_ROLE_VALUE =
+  "text-pretty text-heading-5 font-bold text-foreground md:text-heading-6";
 
 const STAGGER = {
   hidden: {},
@@ -113,30 +122,24 @@ export default function Experience() {
             >
               <div className="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-[1fr_1fr_1.4fr] md:gap-x-12">
                 <div className="min-w-0">
-                  <p className="text-heading-2 uppercase tracking-wider md:hidden">
-                    Year
-                  </p>
-                  <p className="text-pretty text-heading-6 font-bold text-foreground md:pt-0">
+                  <p className={EXPERIENCE_MOBILE_COLUMN_LABEL}>Year</p>
+                  <p className={cn(EXPERIENCE_YEAR_ROLE_VALUE, "md:pt-0")}>
                     {role.year}
                   </p>
                 </div>
                 <div className="min-w-0">
-                  <p className="text-heading-6 uppercase tracking-wider text-muted md:hidden">
-                    Company
-                  </p>
+                  <p className={EXPERIENCE_MOBILE_COLUMN_LABEL}>Company</p>
                   <p className="text-pretty text-body-md text-foreground">
                     {role.company}
                   </p>
                 </div>
                 <div className="min-w-0">
-                  <p className="text-heading-6 uppercase tracking-wider md:hidden">
-                    Role & focus
-                  </p>
+                  <p className={EXPERIENCE_MOBILE_COLUMN_LABEL}>Role & focus</p>
                   <div className="flex flex-col gap-2">
                     {role.titles.map((title) => (
                       <p
                         key={title}
-                        className="text-pretty text-heading-6 font-bold text-foreground"
+                        className={EXPERIENCE_YEAR_ROLE_VALUE}
                       >
                         {title}
                       </p>
