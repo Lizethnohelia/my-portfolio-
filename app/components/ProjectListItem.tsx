@@ -56,9 +56,8 @@ export function ProjectListItem({
           className={cn(
             "relative overflow-hidden rounded-lg bg-background",
             "aspect-[5/3] w-full lg:col-span-7",
-            "max-lg:shadow-elevation-xl max-lg:transition-all max-lg:duration-300 max-lg:ease-out",
-            "max-lg:group-hover:shadow-elevation-2xl",
-            "max-lg:group-active:shadow-elevation-2xl"
+            "max-lg:shadow-elevation-card max-lg:transition-all max-lg:duration-300 max-lg:ease-out",
+            "max-lg:group-hover:shadow-elevation-xl max-lg:group-active:shadow-elevation-xl"
           )}
         >
           <Image
