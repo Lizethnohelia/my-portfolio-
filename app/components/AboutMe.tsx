@@ -16,6 +16,13 @@ const FADE_UP = {
   },
 };
 
+const COUNTRY_FLAGS = [
+  { label: "Colombia", emoji: "🇨🇴" },
+  { label: "Mexico", emoji: "🇲🇽" },
+  { label: "United States", emoji: "🇺🇸" },
+  { label: "Bolivia", emoji: "🇧🇴" },
+] as const;
+
 export default function AboutMe() {
   const shouldReduce = useReducedMotion();
   const noMotion = !!shouldReduce;
@@ -38,8 +45,11 @@ export default function AboutMe() {
       >
         <motion.div variants={FADE_UP} className="max-w-3xl">
           <div className="mb-4 flex gap-2 text-heading-6">
-            <span aria-label="Mexico">🇲🇽</span>
-            <span aria-label="United States">🇺🇸</span>
+            {COUNTRY_FLAGS.map((country) => (
+              <span key={country.label} aria-label={country.label}>
+                {country.emoji}
+              </span>
+            ))}
           </div>
 
           <p className="text-pretty text-body-md font-normal text-foreground">

@@ -47,7 +47,7 @@ export function ProjectListItem({
             <span>{project.cardCategory}</span>
           </p>
 
-          <span className="link-view-case-study w-fit group-hover:text-primary group-hover:underline motion-reduce:transition-none">
+          <span className="link-view-case-study w-fit motion-reduce:transition-none">
             View case study
           </span>
         </div>
@@ -55,7 +55,9 @@ export function ProjectListItem({
         <div
           className={cn(
             "relative overflow-hidden rounded-lg bg-background",
-            "aspect-[5/3] w-full lg:col-span-7"
+            "aspect-[5/3] w-full max-lg:shadow-elevation-md lg:col-span-7",
+            "max-lg:transition-shadow max-lg:duration-500 max-lg:ease-out",
+            "max-lg:group-hover:shadow-elevation-lg"
           )}
         >
           <Image

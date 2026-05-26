@@ -377,7 +377,8 @@
       text-decoration-color 500ms ease-out;
   }
 
-  .link-view-case-study:hover {
+  .link-view-case-study:hover,
+  .group:hover .link-view-case-study {
     color: var(--primary);
     text-decoration: underline;
     text-decoration-color: currentColor;

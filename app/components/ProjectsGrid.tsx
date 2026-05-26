@@ -4,13 +4,8 @@ import { motion, useReducedMotion } from "framer-motion";
 import { PROJECTS } from "../projects/data";
 import { ProjectListItem } from "./ProjectListItem";
 
-const SERVICES = [
-  "AI Product Design",
-  "Design Systems",
-  "Problem Solving",
-  "UX Research",
-  "Prototyping",
-];
+const INTRO_COPY =
+  "When facing new projects and complex challenges, I rely on a structured, data-driven methodology to deliver high-impact results. My approach begins with deeply understanding the core problem and user needs, followed by rapid iteration through wireframing, prototyping, and user validation.";
 
 const FADE_UP = {
   hidden: { opacity: 0, y: 24 },
@@ -50,54 +45,25 @@ function getProjectsListMotion(count: number) {
   };
 }
 
-const INTRO_STAGGER = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.08 } },
-};
-
 function IntroCell({ noMotion }: { noMotion: boolean }) {
   return (
     <motion.div
-      variants={INTRO_STAGGER}
+      variants={FADE_UP}
       initial={noMotion ? false : "hidden"}
       animate={noMotion ? "show" : undefined}
       whileInView={noMotion ? undefined : "show"}
       viewport={{ once: true, amount: 0.2, margin: "0px 0px 60px 0px" }}
-      className="flex flex-col gap-5 lg:max-w-none"
+      className="flex max-w-xl gap-2 lg:max-w-none"
     >
-      <motion.h2
-        variants={FADE_UP}
-        className="max-w-xl text-balance text-heading-3 font-normal text-foreground"
+      <span
+        className="flex h-lh shrink-0 items-center"
+        aria-hidden
       >
-        I do
-      </motion.h2>
-
-      <motion.div variants={FADE_UP} className="flex flex-wrap gap-2">
-        {SERVICES.map((s) => (
-          <span
-            key={s}
-            className="w-fit rounded-full border border-border px-3 py-1.5 text-body-sm text-foreground sm:px-4"
-          >
-            {s}
-          </span>
-        ))}
-      </motion.div>
-
-      <motion.p
-        variants={FADE_UP}
-        className="max-w-xl text-balance text-heading-3 font-normal text-foreground"
-      >
-        and everything in between
-      </motion.p>
-
-      <motion.p
-        variants={FADE_UP}
-        className="max-w-xl text-pretty text-body-md font-normal"
-      >
-        From concept to production — I partner with teams building AI-first
-        products, turning complex workflows into intuitive experiences that users
-        love and businesses rely on.
-      </motion.p>
+        <span className="hero-pill-dot text-primary" />
+      </span>
+      <p className="text-pretty text-body-md font-bold text-foreground">
+        {INTRO_COPY}
+      </p>
     </motion.div>
   );
 }

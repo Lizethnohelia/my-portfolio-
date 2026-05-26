@@ -52,9 +52,6 @@ const ROLES: Role[] = [
 
 const YEARS_IN_INDUSTRY = "8+";
 
-const EXPERIENCE_INTRO =
-  "Based in Colombia, I'm a Senior Product Designer collaborating with clients across the US, Mexico, Colombia and Bolivia. Whether I'm tackling complex B2B systems or crafting intuitive B2C apps, my goal is to help teams ship high-performing, impactful products.";
-
 /** Labels de columna en móvil — mismo estilo que Selected Projects. */
 const EXPERIENCE_COLUMN_LABEL = "text-section-label";
 const EXPERIENCE_MOBILE_COLUMN_LABEL = cn(EXPERIENCE_COLUMN_LABEL, "md:hidden");
@@ -102,13 +99,6 @@ export default function Experience() {
         className="px-5 pb-20 pt-10 sm:px-8 md:px-12 lg:px-16 lg:pb-24 lg:pt-16"
       >
         <div className="max-w-5xl">
-          <motion.p
-            variants={FADE_UP}
-            className="mb-10 max-w-3xl text-pretty text-body-md font-normal text-foreground md:mb-12"
-          >
-            {EXPERIENCE_INTRO}
-          </motion.p>
-
           <motion.div
             variants={FADE_UP}
             className="mb-6 hidden border-b-table-row pb-6 md:grid md:grid-cols-[1fr_1fr_1.4fr] md:gap-x-12"
