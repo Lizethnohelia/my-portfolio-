@@ -60,6 +60,34 @@
   --font-mono: var(--font-family-mono);
 
   /* Escala modular fluida (clamp: mínimo legible móvil → máximo escritorio) */
+  /** Hero home (dvdrod.com): nombre display. */
+  --text-hero-display: clamp(4.5rem, 12vw, 11rem);
+  --text-hero-display--line-height: 0.88;
+  --text-hero-display--letter-spacing: -0.05em;
+  --text-hero-eyebrow: 0.6875rem;
+  --text-hero-eyebrow--letter-spacing: 0.14em;
+  --text-hero-desc: 0.9375rem;
+  --text-hero-desc--line-height: 1.65;
+  --text-hero-pill: 0.6875rem;
+  --text-hero-pill--letter-spacing: 0.09em;
+  --text-hero-scroll: 0.5625rem;
+  --text-hero-scroll--letter-spacing: 0.18em;
+  --text-hero-marquee: 0.6875rem;
+  --text-hero-marquee--letter-spacing: 0.12em;
+  --spacing-hero-inline: 2.75rem;
+  --spacing-hero-inline-mobile: 1.5rem;
+  --spacing-hero-bottom: 3.5rem;
+  --spacing-hero-bottom-mobile: 2.5rem;
+  --spacing-hero-nav-y: 1.375rem;
+  --max-width-hero-desc: 22.5rem;
+  --size-hero-scroll-line: 4rem;
+  --size-hero-pill-dot: 0.375rem;
+  --duration-hero-marquee: 28s;
+  --duration-hero-scroll-line: 2.4s;
+  --duration-hero-pill-blink: 2.2s;
+  --size-hero-animating-line: 0.1875rem;
+  --ratio-hero-animating-edge: 0.2;
+
   --text-heading-1: clamp(1.75rem, 4vw + 1rem, 5.6rem);
   --text-heading-1--line-height: 1.15;
   --text-heading-1--letter-spacing: -0.022em;
@@ -98,6 +126,9 @@
 
   --text-body-xs: clamp(0.625rem, 0.2vw + 0.58rem, 1rem);
   --text-body-xs--line-height: 1.5;
+
+  /** Etiquetas de sección (Selected Projects, hero meta, Experience). */
+  --text-section-label--letter-spacing: 0.1em;
 
   --radius-xs: 0.25rem;
   --radius-sm: 0.5rem;
@@ -165,6 +196,8 @@
   --min-width-case-study-desktop: 90rem;
   /** Prima: padding vertical de la sección de video antes del footer (60px). */
   --spacing-case-study-product-video-y: 3.75rem;
+  /** Projects grid: separación imagen ↔ línea divisora (60px). */
+  --spacing-projects-grid-image-top: 3.75rem;
   /** Prima: zoom de la card en el bento (120% vía recorte, sin escalar bitmap). */
   --inset-prima-card-image-zoom: -10%;
   /** Prima: nombre "Prima" en hover de la card (24px / 1.5rem). */
@@ -182,6 +215,41 @@
 
 /* Utilidades de tipo explícitas (Tailwind v4 + @theme: asegura font-size / lh en build) */
 @layer utilities {
+  .text-hero-display {
+    font-family: var(--font-family-sans);
+    font-size: var(--text-hero-display);
+    line-height: var(--text-hero-display--line-height);
+    letter-spacing: var(--text-hero-display--letter-spacing);
+  }
+
+  .px-hero {
+    padding-left: var(--spacing-hero-inline-mobile);
+    padding-right: var(--spacing-hero-inline-mobile);
+  }
+
+  @media (min-width: 48rem) {
+    .px-hero {
+      padding-left: var(--spacing-hero-inline);
+      padding-right: var(--spacing-hero-inline);
+    }
+  }
+
+  .pb-hero {
+    padding-bottom: max(
+      var(--spacing-hero-bottom-mobile),
+      calc(var(--spacing-hero-bottom-mobile) + env(safe-area-inset-bottom, 0px))
+    );
+  }
+
+  @media (min-width: 48rem) {
+    .pb-hero {
+      padding-bottom: max(
+        var(--spacing-hero-bottom),
+        calc(var(--spacing-hero-bottom) + env(safe-area-inset-bottom, 0px))
+      );
+    }
+  }
+
   .text-heading-1 {
     font-family: var(--font-family-sans);
     font-size: var(--text-heading-1);
@@ -266,6 +334,55 @@
     font-weight: var(--font-weight-body);
   }
 
+  .text-section-label {
+    font-family: var(--font-family-body);
+    font-size: var(--text-body-sm);
+    line-height: var(--text-body-sm--line-height);
+    font-weight: 500;
+    letter-spacing: var(--text-section-label--letter-spacing);
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /** Manrope + body-sm + bold (marquee, year y roles en Experience). */
+  .text-emphasis-sm {
+    font-family: var(--font-family-sans);
+    font-size: var(--text-body-sm);
+    line-height: var(--text-body-sm--line-height);
+    font-weight: 700;
+    color: var(--foreground);
+  }
+
+  /** Marquee del hero: emphasis-sm + uppercase muted. */
+  .text-marquee-label {
+    font-family: var(--font-family-sans);
+    font-size: var(--text-body-sm);
+    line-height: var(--text-body-sm--line-height);
+    font-weight: 700;
+    letter-spacing: var(--text-section-label--letter-spacing);
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .link-view-case-study {
+    font-family: var(--font-family-body);
+    font-size: var(--text-body-sm);
+    line-height: var(--text-body-sm--line-height);
+    font-weight: 500;
+    color: var(--foreground);
+    text-underline-offset: 0.25rem;
+    text-decoration-color: transparent;
+    transition:
+      color 500ms ease-out,
+      text-decoration-color 500ms ease-out;
+  }
+
+  .link-view-case-study:hover {
+    color: var(--primary);
+    text-decoration: underline;
+    text-decoration-color: currentColor;
+  }
+
   .border-b-table-row {
     border-bottom-width: var(--border-width-table-row);
     border-bottom-style: solid;
@@ -316,6 +433,14 @@
     padding-bottom: var(--spacing-case-study-product-video-y);
   }
 
+  .mt-projects-grid-image {
+    margin-top: var(--spacing-projects-grid-image-top);
+  }
+
+  .pt-projects-grid-image {
+    padding-top: var(--spacing-projects-grid-image-top);
+  }
+
   .inset-prima-card-image-zoom {
     inset: var(--inset-prima-card-image-zoom);
   }
@@ -353,9 +478,313 @@
 }
 
 /**
- * Prima case study — wipe izquierda → derecha, líneas en orden (1 → n).
- * Oscuro: texto #fafafa hasta el fill #ff4d6f; claro: texto #1a1a1a hasta el fill #09090b.
- * Tras el fill: texto #fafafa.
+ * Hero home — layout dvdrod.com (fuentes del sitio: Manrope + Open Sans).
+ */
+@layer components {
+  .hero-screen {
+    position: relative;
+    display: flex;
+    min-height: 100svh;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+
+  .hero-nav {
+    background-color: color-mix(in oklab, var(--background) 88%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid color-mix(in oklab, var(--border) 65%, transparent);
+  }
+
+  .hero-animating-lines {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .hero-animating-lines-edge {
+    position: absolute;
+    overflow: hidden;
+  }
+
+  .hero-animating-lines-edge-top {
+    top: 0;
+    left: 0;
+    right: 0;
+    height: calc(100% * var(--ratio-hero-animating-edge));
+  }
+
+  .hero-animating-lines-edge-bottom {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: calc(100% * var(--ratio-hero-animating-edge));
+  }
+
+  .hero-animating-lines-edge-left {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: calc(100% * var(--ratio-hero-animating-edge));
+  }
+
+  .hero-animating-lines-edge-right {
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: calc(100% * var(--ratio-hero-animating-edge));
+  }
+
+  .hero-animating-lines-bar-top {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+
+  .hero-animating-lines-bar-bottom {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+
+  .hero-animating-lines-bar-left {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  .hero-animating-lines-bar-right {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+  }
+
+  .hero-line-track {
+    overflow: hidden;
+    background-color: color-mix(in oklab, var(--border) 55%, transparent);
+  }
+
+  .hero-line-track-horizontal {
+    height: var(--size-hero-animating-line);
+  }
+
+  .hero-line-track-vertical {
+    width: var(--size-hero-animating-line);
+  }
+
+  .hero-line-accent {
+    background-color: var(--primary);
+  }
+
+  .hero-eyebrow {
+    margin-bottom: 1.25rem;
+    overflow: hidden;
+  }
+
+  .hero-title {
+    margin-bottom: 3rem;
+    font-family: var(--font-family-sans);
+    font-size: var(--text-hero-display);
+    font-weight: 800;
+    line-height: var(--text-hero-display--line-height);
+    letter-spacing: var(--text-hero-display--letter-spacing);
+    color: var(--foreground);
+  }
+
+  .hero-title-line {
+    display: block;
+    overflow: hidden;
+  }
+
+  .hero-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+
+  .hero-desc {
+    max-width: var(--max-width-hero-desc);
+    overflow: hidden;
+  }
+
+  .hero-pills {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.625rem;
+  }
+
+  .hero-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4375rem;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border);
+    padding: 0.4375rem 0.875rem;
+  }
+
+  .hero-pill-available {
+    border-color: color-mix(in oklab, var(--primary) 35%, transparent);
+    color: var(--primary);
+  }
+
+  .hero-pill-available.text-section-label {
+    color: var(--primary);
+  }
+
+  .hero-pill-available .hero-pill-dot {
+    color: var(--primary);
+  }
+
+  .hero-pill-dot {
+    width: var(--size-hero-pill-dot);
+    height: var(--size-hero-pill-dot);
+    border-radius: var(--radius-full);
+    background-color: currentColor;
+    animation: hero-pill-blink var(--duration-hero-pill-blink) ease infinite;
+  }
+
+  @keyframes hero-pill-blink {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.4;
+    }
+  }
+
+  .hero-scroll-hint {
+    position: absolute;
+    top: 6.875rem;
+    right: var(--spacing-hero-inline);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.625rem;
+  }
+
+  @media (max-width: 47.999rem) {
+    .hero-scroll-hint {
+      top: auto;
+      right: var(--spacing-hero-inline-mobile);
+      bottom: 3.5rem;
+    }
+
+    .hero-bottom {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .hero-pills {
+      align-items: flex-start;
+    }
+  }
+
+  .hero-scroll-label {
+    font-family: var(--font-family-sans);
+    font-size: var(--text-hero-scroll);
+    font-weight: 500;
+    letter-spacing: var(--text-hero-scroll--letter-spacing);
+    text-transform: uppercase;
+    color: var(--muted);
+    writing-mode: vertical-lr;
+  }
+
+  .hero-scroll-line {
+    position: relative;
+    width: 1px;
+    height: var(--size-hero-scroll-line);
+    overflow: hidden;
+    background-color: var(--border);
+  }
+
+  .hero-scroll-line::after {
+    position: absolute;
+    top: -100%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--primary);
+    animation: hero-scroll-line var(--duration-hero-scroll-line) ease infinite;
+    content: "";
+  }
+
+  @keyframes hero-scroll-line {
+    0% {
+      top: -100%;
+    }
+    100% {
+      top: 100%;
+    }
+  }
+
+  .hero-marquee-wrap {
+    overflow: hidden;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding-top: 0.875rem;
+    padding-bottom: 0.875rem;
+    white-space: nowrap;
+  }
+
+  .hero-marquee-track {
+    display: inline-flex;
+    animation: hero-marquee var(--duration-hero-marquee) linear infinite;
+  }
+
+  .hero-marquee-wrap:hover .hero-marquee-track {
+    animation-play-state: paused;
+  }
+
+  .hero-marquee-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 3.5rem;
+    padding-left: 1.75rem;
+    padding-right: 1.75rem;
+  }
+
+  .hero-marquee-item::after {
+    font-size: 0.4375rem;
+    content: "✦";
+  }
+
+  @keyframes hero-marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-marquee-track {
+      animation: none;
+    }
+
+    .hero-scroll-line::after {
+      animation: none;
+      top: 0;
+    }
+
+    .hero-pill-dot {
+      animation: none;
+    }
+  }
+}
+
+/**
+ * Prima case study — color de texto izquierda → derecha, línea por línea (sin fondo).
+ * Oscuro: foreground del bloque + peso bold. Claro: #225df1 (secondary). Tamaño heredado.
  */
 @layer components {
   .highlight-lines {
@@ -368,35 +797,49 @@
 
   .highlight-wipe {
     display: inline;
-    padding: 0.08em 0.18em 0.08em 0.15em;
-    background-repeat: no-repeat;
-    background-position: 0 50%;
-    background-size: 0% 100%;
-    color: var(--prima-highlight-text-rest);
+    padding: 0;
+    margin: 0;
+    font-family: inherit;
+    font-size: inherit;
+    font-style: inherit;
+    font-weight: var(--prima-highlight-weight-rest, inherit);
+    letter-spacing: inherit;
+    line-height: inherit;
     background-image: linear-gradient(
-      var(--prima-highlight-fill),
-      var(--prima-highlight-fill)
+      90deg,
+      var(--prima-highlight-active) 0%,
+      var(--prima-highlight-active) 100%
     );
+    background-repeat: no-repeat;
+    background-position: 0% 50%;
+    background-size: 0% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: var(--prima-highlight-text-rest);
     transition:
       background-size var(--duration-highlight-wipe) var(--ease-highlight-wipe),
-      color 0.2s var(--ease-highlight-wipe);
-    transition-delay: var(--highlight-wipe-bg-delay, 0s),
-      var(--highlight-wipe-text-delay, 0s);
+      font-weight var(--duration-highlight-wipe) var(--ease-highlight-wipe);
+    transition-delay: var(--highlight-wipe-delay, 0s);
   }
 
   [data-highlight-tone="on-dark"] {
-    --prima-highlight-fill: #ff4d6f;
-    --prima-highlight-text-rest: #fafafa;
+    --prima-highlight-active: var(--footer-text);
+    --prima-highlight-text-rest: currentColor;
+    --prima-highlight-weight-rest: inherit;
+    --prima-highlight-weight-active: var(--font-weight-bold);
   }
 
   [data-highlight-tone="on-light"] {
-    --prima-highlight-fill: #09090b;
-    --prima-highlight-text-rest: #1a1a1a;
+    --prima-highlight-active: #225df1;
+    --prima-highlight-text-rest: currentColor;
+    --prima-highlight-weight-rest: inherit;
+    --prima-highlight-weight-active: inherit;
   }
 
   [data-highlight-active="true"] .highlight-wipe {
     background-size: 100% 100%;
-    color: #fafafa;
+    -webkit-text-fill-color: transparent;
+    font-weight: var(--prima-highlight-weight-active, inherit);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -417,7 +860,7 @@
     --primary-foreground: #ffffff;
     --surface: #f4f4f5;
     --border: #e4e4e7;
-    --muted: #71717a;
+    --muted: #404049;
     --gray: #74747e;
     --gray-lighter: #b6b6bd;
     /* Bloques tipo walkthrough sobre fondo de video (siempre oscuro) */
@@ -438,6 +881,7 @@
       --background: #09090b;
       --foreground: #fafafa;
       --primary: #ff4d6f;
+      --secondary: #225df1;
       --primary-foreground: #ffffff;
       --surface: #18181b;
       --border: #27272a;
@@ -446,6 +890,16 @@
       --footer-surface: #0a0a0b;
       --footer-text: #fafafa;
       --footer-text-muted: color-mix(in oklab, var(--footer-text) 70%, transparent);
+    }
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
     }
   }
 

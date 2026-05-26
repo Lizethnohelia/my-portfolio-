@@ -18,8 +18,7 @@ export function HighlightedText({
     <span
       className={cn("highlight-wipe", className)}
       style={{
-        ["--highlight-wipe-bg-delay" as string]: `${delay}s`,
-        ["--highlight-wipe-text-delay" as string]: `${delay}s`,
+        ["--highlight-wipe-delay" as string]: `${delay}s`,
       }}
     >
       {children}

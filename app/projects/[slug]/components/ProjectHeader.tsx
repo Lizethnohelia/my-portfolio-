@@ -6,10 +6,7 @@ const META_LABEL = "text-body-xs font-semibold uppercase tracking-widest text-mu
 export function ProjectHeader({ project }: { project: Project }) {
   return (
     <header className="px-5 pb-12 pt-8 sm:px-8 sm:pt-10 md:px-12 lg:px-16 lg:pb-16 lg:pt-14">
-      <Link
-        href="/#projects"
-        className="inline-flex items-center gap-2 text-body-sm font-medium text-muted transition-colors hover:text-foreground"
-      >
+      <Link href="/#projects" className="link-view-case-study inline-flex w-fit items-center gap-2">
         <span aria-hidden="true">←</span>
         Back to projects
       </Link>

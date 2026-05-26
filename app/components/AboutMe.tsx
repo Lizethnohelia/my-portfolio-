@@ -21,7 +21,7 @@ export default function AboutMe() {
   const noMotion = !!shouldReduce;
 
   return (
-    <section className="relative bg-surface">
+    <section id="about" className="relative scroll-mt-24 bg-surface">
       <div className="sticky top-0 z-20 border-b border-border bg-surface px-5 py-5 sm:px-8 md:px-12 lg:px-16">
         <h2 className="text-balance text-heading-3 font-normal text-foreground">
           About me

@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
+import { formatExperienceYear } from "@/lib/format-experience-year";
 import { cn } from "@/lib/utils";
 
 interface Role {
@@ -51,13 +52,15 @@ const ROLES: Role[] = [
 
 const YEARS_IN_INDUSTRY = "8+";
 
-/** Labels de columna en móvil: mismo tamaño que la descripción + mayúsculas sostenidas. */
-const EXPERIENCE_MOBILE_COLUMN_LABEL =
-  "text-body-sm uppercase tracking-wider text-muted md:hidden";
+const EXPERIENCE_INTRO =
+  "Based in Colombia, I'm a Senior Product Designer collaborating with clients across the US, Mexico, Colombia and Bolivia. Whether I'm tackling complex B2B systems or crafting intuitive B2C apps, my goal is to help teams ship high-performing, impactful products.";
 
-/** Year y títulos de rol: heading-5 en móvil (≥ body-sm), heading-6 desde md. */
-const EXPERIENCE_YEAR_ROLE_VALUE =
-  "text-pretty text-heading-5 font-bold text-foreground md:text-heading-6";
+/** Labels de columna en móvil — mismo estilo que Selected Projects. */
+const EXPERIENCE_COLUMN_LABEL = "text-section-label";
+const EXPERIENCE_MOBILE_COLUMN_LABEL = cn(EXPERIENCE_COLUMN_LABEL, "md:hidden");
+
+/** Year y títulos de rol — misma escala y Manrope bold que el marquee del hero. */
+const EXPERIENCE_YEAR_ROLE_VALUE = "text-pretty text-emphasis-sm";
 
 const STAGGER = {
   hidden: {},
@@ -99,19 +102,20 @@ export default function Experience() {
         className="px-5 pb-20 pt-10 sm:px-8 md:px-12 lg:px-16 lg:pb-24 lg:pt-16"
       >
         <div className="max-w-5xl">
+          <motion.p
+            variants={FADE_UP}
+            className="mb-10 max-w-3xl text-pretty text-body-md font-normal text-foreground md:mb-12"
+          >
+            {EXPERIENCE_INTRO}
+          </motion.p>
+
           <motion.div
             variants={FADE_UP}
             className="mb-6 hidden border-b-table-row pb-6 md:grid md:grid-cols-[1fr_1fr_1.4fr] md:gap-x-12"
           >
-            <span className="text-body-md font-bold uppercase tracking-widest text-muted">
-              Year
-            </span>
-            <span className="text-body-md  font-bold uppercase tracking-widest text-muted">
-              Company
-            </span>
-            <span className="text-body-md font-bold uppercase tracking-widest text-muted">
-              Role & focus
-            </span>
+            <span className={EXPERIENCE_COLUMN_LABEL}>Year</span>
+            <span className={EXPERIENCE_COLUMN_LABEL}>Company</span>
+            <span className={EXPERIENCE_COLUMN_LABEL}>Role & focus</span>
           </motion.div>
 
           {ROLES.map((role) => (
@@ -124,7 +128,7 @@ export default function Experience() {
                 <div className="min-w-0">
                   <p className={EXPERIENCE_MOBILE_COLUMN_LABEL}>Year</p>
                   <p className={cn(EXPERIENCE_YEAR_ROLE_VALUE, "md:pt-0")}>
-                    {role.year}
+                    {formatExperienceYear(role.year)}
                   </p>
                 </div>
                 <div className="min-w-0">

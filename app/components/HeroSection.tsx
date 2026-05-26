@@ -1,158 +1,215 @@
 "use client";
 
-import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
+import { HeroAnimatingLines } from "./HeroAnimatingLines";
+import { SiteLogo } from "./SiteLogo";
 
-const EASE_IN = [0.42, 0, 1, 1] as const;
+const EASE_OUT = [0.22, 1, 0.36, 1] as const;
 
-const SLIDE_DOWN = {
-  hidden: { opacity: 0, y: -40 },
+const NAV_LINKS = [
+  { href: "#projects", label: "Work" },
+  { href: "#about", label: "About" },
+  { href: "#contact", label: "Contact" },
+] as const;
+
+const HERO_MARQUEE_SKILLS = [
+  "AI Product Design",
+  "Design Systems",
+  "Problem Solving",
+  "UX Research",
+  "Prototyping",
+  "Cross-functional",
+  "Problem Solving",
+  "B2B & B2C",
+  "AI-assisted Workflows",
+  "Product Strategy",
+] as const;
+
+const HERO_DESC =
+  "I specialize in translating complex business challenges into intuitive, high-converting experiences.";
+
+const LINE_REVEAL = {
+  hidden: { y: "110%" },
   show: {
-    opacity: 1,
     y: 0,
-    transition: { duration: 1, ease: EASE_IN },
+    transition: { duration: 1.05, ease: EASE_OUT },
   },
 };
 
-const HERO_STAGGER = {
+const FADE_UP = {
+  hidden: { opacity: 0, y: 16 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.85, ease: EASE_OUT },
+  },
+};
+
+const HERO_INTRO = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.2, delayChildren: 0.1 } },
-};
-
-const WORD_REVEAL = {
-  hidden: { opacity: 0, y: -20 },
   show: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: EASE_IN },
-  },
-};
-
-const AVATAR_POP = {
-  hidden: { scale: 0 },
-  show: {
-    scale: 1,
     transition: {
-      type: "spring" as const,
-      duration: 0.4,
-      bounce: 0.5,
-      delay: 1.2,
+      staggerChildren: 0.1,
+      delayChildren: 0.05,
     },
   },
 };
 
-const HEADING_TEXT =
-  "Senior Product Designer with 9 years of experience building scalable digital ecosystems";
-  ;
-
-function MinimalNav() {
+function HeroNav() {
   return (
     <motion.nav
-      initial={{ opacity: 0, y: -20 }}
+      initial={{ opacity: 0, y: -16 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, ease: EASE_IN }}
-      className="relative z-10 flex items-center justify-between py-6"
+      transition={{ duration: 0.7, ease: EASE_OUT }}
+      className="hero-nav fixed inset-x-0 top-0 z-50 flex items-center justify-between px-hero"
+      style={{
+        paddingTop: "var(--spacing-hero-nav-y)",
+        paddingBottom: "var(--spacing-hero-nav-y)",
+      }}
+      aria-label="Principal"
     >
-      <Link
-        href="/"
-        aria-label="Home"
-        className="flex h-9 w-9 items-center justify-center rounded-lg bg-foreground text-heading-6 font-bold text-background"
-      >
-        n
+      <Link href="#projects" className="shrink-0" aria-label="Inicio">
+        <SiteLogo size="nav" priority />
       </Link>
-      <Link
-        href="https://linkedin.com"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-body-sm font-semibold text-foreground transition-colors hover:text-muted"
-        aria-label="LinkedIn"
-      >
-        in
-      </Link>
+
+      <div className="flex items-center gap-6 sm:gap-10">
+        <ul className="hidden items-center gap-8 sm:flex">
+          {NAV_LINKS.map((link) => (
+            <li key={link.href}>
+              <Link
+                href={link.href}
+                className="text-body-sm font-medium text-foreground transition-colors hover:text-muted"
+              >
+                {link.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+        <Link
+          href="https://www.linkedin.com/in/lizethnohelia/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-body-sm font-semibold text-foreground transition-colors hover:text-muted"
+          aria-label="LinkedIn"
+        >
+          in
+        </Link>
+      </div>
     </motion.nav>
   );
 }
 
-function Greeting() {
+function HeroTitleLine({ children, delay = 0 }: { children: string; delay?: number }) {
+  const shouldReduce = useReducedMotion();
+
   return (
-    <motion.div
-      variants={SLIDE_DOWN}
-      className="mb-10 flex items-center gap-4 lg:mb-14"
-    >
-      <motion.div
-        variants={AVATAR_POP}
-        className="relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl lg:h-20 lg:w-20"
+    <span className="hero-title-line">
+      <motion.span
+        className="block"
+        variants={LINE_REVEAL}
+        initial={shouldReduce ? "show" : "hidden"}
+        animate="show"
+        transition={{ delay }}
       >
-        <Image
-          src="/avatar.png"
-          alt="Lizeth Avendaño"
-          fill
-          sizes="80px"
-          className="object-cover"
-          priority
-        />
-      </motion.div>
-      <div className="flex flex-col">
-        <span className="text-body-md text-foreground">Greeting,</span>
-        <span className="text-heading-6 font-normal text-foreground">
-          I&apos;m Lizeth Avenda&ntilde;o
-        </span>
+        {children}
+      </motion.span>
+    </span>
+  );
+}
+
+function HeroMarquee() {
+  const items = [...HERO_MARQUEE_SKILLS, ...HERO_MARQUEE_SKILLS];
+
+  return (
+    <div className="hero-marquee-wrap bg-surface" aria-hidden>
+      <div className="hero-marquee-track">
+        {items.map((skill, index) => (
+          <span
+            key={`${skill}-${index}`}
+            className="hero-marquee-item text-marquee-label"
+          >
+            {skill}
+          </span>
+        ))}
       </div>
-    </motion.div>
+    </div>
   );
 }
 
 export default function HeroSection() {
-  const words = HEADING_TEXT.split(" ");
+  const shouldReduce = useReducedMotion();
 
   return (
-    <section className="flex min-h-screen flex-col bg-surface px-5 sm:px-8 md:px-12 lg:px-16">
-      <MinimalNav />
+    <>
+      <HeroNav />
 
-      <motion.div
-        initial="hidden"
-        animate="show"
-        variants={HERO_STAGGER}
-        className="relative z-10 flex flex-1 flex-col justify-center pb-16 lg:pb-24"
+      <section
+        id="hero"
+        className="hero-screen relative overflow-hidden bg-surface px-hero pb-hero"
+        aria-labelledby="hero-title"
       >
-        <Greeting />
+        <HeroAnimatingLines />
+
+        <Link
+          href="#projects"
+          className="hero-scroll-hint z-10 motion-reduce:opacity-100"
+          aria-label="Scroll to projects"
+        >
+          <span className="hero-scroll-line" aria-hidden />
+          <span className="hero-scroll-label">Scroll</span>
+        </Link>
 
         <motion.div
-          variants={{
-            hidden: {},
-            show: { transition: { staggerChildren: 0.03, delayChildren: 0.1 } },
-          }}
-          className="relative"
+          variants={HERO_INTRO}
+          initial={shouldReduce ? "show" : "hidden"}
+          animate="show"
+          className="relative z-10 w-full"
         >
-          <motion.h1 className="max-w-6xl text-balance text-heading-1 font-normal text-foreground">
-            {words.map((word, i) => (
-              <motion.span
-                key={i}
-                variants={WORD_REVEAL}
-                className="inline-block"
-              >
-                {word}
-                {i < words.length - 1 ? "\u00A0" : ""}
-              </motion.span>
-            ))}
-          </motion.h1>
+          <motion.div
+            variants={LINE_REVEAL}
+            initial={shouldReduce ? "show" : "hidden"}
+            animate="show"
+            transition={{ delay: 0.5, duration: 0.75, ease: EASE_OUT }}
+            className="hero-eyebrow w-fit"
+          >
+            <span className="hero-pill text-section-label">
+              Senior Product Designer
+            </span>
+          </motion.div>
 
-          
+          <h1 id="hero-title" className="hero-title">
+            <HeroTitleLine delay={0.05}>Lizeth</HeroTitleLine>
+            <HeroTitleLine delay={0.15}>Avenda&ntilde;o</HeroTitleLine>
+          </h1>
+
+          <div className="hero-bottom">
+            <motion.p
+              variants={FADE_UP}
+              className="hero-desc max-w-xl text-pretty text-body-md font-normal text-foreground"
+            >
+              {HERO_DESC}
+            </motion.p>
+
+            <motion.div
+              variants={FADE_UP}
+              transition={{ delay: 0.25 }}
+              className="hero-pills"
+            >
+              <div className="hero-pill hero-pill-available text-section-label text-primary">
+                <span className="hero-pill-dot" aria-hidden />
+                Available for work
+              </div>
+              <div className="hero-pill text-section-label">Colombia · Remote</div>
+              <div className="hero-pill text-section-label">
+                9+ years in product design
+              </div>
+            </motion.div>
+          </div>
         </motion.div>
+      </section>
 
-        <motion.p
-          variants={SLIDE_DOWN}
-          className="mt-8 max-w-6xl text-pretty text-body-md font-normal"
-        >
-          I specialize in translating complex business challenges into intuitive, 
-          high-converting experiences for both B2B manufacturing and B2C Fintech sectors. 
-          By integrating AI-powered productivity tools into my design workflow, 
-          I accelerate rapid prototyping, streamline developer handoffs, 
-          and deliver user-centric solutions that drive measurable business value faster and smarter.
-
-        </motion.p>
-      </motion.div>
-    </section>
+      <HeroMarquee />
+    </>
   );
 }

@@ -9,7 +9,7 @@ import {
   type ReactNode,
 } from "react";
 
-/** `on-dark`: footer / Product Overview. `on-light`: fondo blanco o gris claro. */
+/** `on-dark`: footer / Overview — foreground + bold. `on-light`: fondo claro — secondary. */
 export type CaseStudyHighlightTone = "on-dark" | "on-light";
 
 type HighlightGroupContextValue = {
@@ -24,7 +24,7 @@ export function useCaseStudyHighlightGroup(): HighlightGroupContextValue | null 
   return useContext(CaseStudyHighlightGroupContext);
 }
 
-/** Dispara el wipe de highlight cuando el bloque entra en foco (viewport). */
+/** Dispara el cambio de color de highlight cuando el bloque entra en foco (viewport). */
 export function CaseStudyHighlightGroup({
   tone,
   children,

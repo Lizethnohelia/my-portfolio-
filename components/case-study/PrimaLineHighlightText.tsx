@@ -44,9 +44,8 @@ export function PrimaLineHighlightText({
   return (
     <span ref={anchorRef} className="highlight-lines inline">
       {lines.map((line, lineIndex) => {
-        const lineStartDelay = phraseDelay + lineIndex * HIGHLIGHT_WIPE_DURATION_S;
-        const textColorDelay =
-          lineStartDelay + HIGHLIGHT_WIPE_DURATION_S * 0.92;
+        const lineStartDelay =
+          phraseDelay + lineIndex * HIGHLIGHT_WIPE_DURATION_S;
 
         return (
           <span
@@ -56,8 +55,7 @@ export function PrimaLineHighlightText({
             <span
               className="highlight-wipe"
               style={{
-                ["--highlight-wipe-bg-delay" as string]: `${lineStartDelay}s`,
-                ["--highlight-wipe-text-delay" as string]: `${textColorDelay}s`,
+                ["--highlight-wipe-delay" as string]: `${lineStartDelay}s`,
               }}
             >
               {line}
