@@ -53,7 +53,7 @@ export default function AboutMe() {
           </div>
 
           <p className="text-pretty text-body-md font-normal text-foreground">
-          Based in Colombia, I’m a Senior Product Designer collaborating with clients across the US, Mexico, and Bolivia.
+          Based in Colombia, I’m a Senior Product Designer collaborating with clients across the US, Mexico, Colombia and Bolivia.
            Whether I&apos;m tackling complex B2B systems or crafting intuitive B2C apps, my goal is to help teams ship high-performing, 
            impactful products.
           </p>

@@ -55,9 +55,10 @@ export function ProjectListItem({
         <div
           className={cn(
             "relative overflow-hidden rounded-lg bg-background",
-            "aspect-[5/3] w-full max-lg:shadow-elevation-md lg:col-span-7",
-            "max-lg:transition-shadow max-lg:duration-500 max-lg:ease-out",
-            "max-lg:group-hover:shadow-elevation-lg"
+            "aspect-[5/3] w-full lg:col-span-7",
+            "max-lg:shadow-elevation-xl max-lg:transition-all max-lg:duration-300 max-lg:ease-out",
+            "max-lg:group-hover:shadow-elevation-2xl",
+            "max-lg:group-active:shadow-elevation-2xl"
           )}
         >
           <Image
@@ -68,7 +69,10 @@ export function ProjectListItem({
             quality={project.cardImageZoom ? 100 : 75}
             priority={imagePriority || project.cardImageZoom}
             className={cn(
-              "origin-center object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100",
+              "origin-center object-cover object-top transition-transform ease-out",
+              "max-lg:duration-300 max-lg:group-hover:scale-110 max-lg:group-active:scale-110",
+              "lg:duration-700 lg:group-hover:scale-105",
+              "motion-reduce:transition-none motion-reduce:group-hover:scale-100 motion-reduce:group-active:scale-100",
               project.cardImageZoom && "inset-prima-card-image-zoom"
             )}
           />

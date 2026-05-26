@@ -302,6 +302,11 @@
   .shadow-elevation-xl {
     box-shadow: var(--shadow-elevation-xl);
   }
+
+  .shadow-elevation-2xl {
+    box-shadow: var(--shadow-elevation-2xl);
+  }
+
   .text-section-title {
     font-family: var(--font-family-sans);
     font-size: var(--text-section-title);
