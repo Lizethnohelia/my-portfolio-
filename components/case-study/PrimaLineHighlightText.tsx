@@ -21,16 +21,17 @@ export function PrimaLineHighlightText({
 
   useLayoutEffect(() => {
     const paragraph = anchorRef.current?.closest("p");
-    if (!paragraph) {
-      setLines([text]);
-      return;
-    }
 
     const remeasure = () => {
-      setLines(splitTextIntoLines(text, paragraph));
+      setLines(paragraph ? splitTextIntoLines(text, paragraph) : [text]);
     };
 
     remeasure();
+
+    if (!paragraph) {
+      return;
+    }
+
     const observer = new ResizeObserver(remeasure);
     observer.observe(paragraph);
     window.addEventListener("resize", remeasure);

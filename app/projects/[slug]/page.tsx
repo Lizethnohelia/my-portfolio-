@@ -20,9 +20,24 @@ export async function generateMetadata({
   if (!project) {
     return { title: "Project not found" };
   }
+  const title = `${project.title} · ${project.headline}`;
   return {
-    title: `${project.title} · ${project.headline} — Lizeth Avendaño`,
+    title,
     description: project.description,
+    alternates: { canonical: `/projects/${project.slug}` },
+    openGraph: {
+      type: "article",
+      title,
+      description: project.description,
+      url: `/projects/${project.slug}`,
+      images: [{ url: project.cardImage, alt: `${project.title} case study` }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description: project.description,
+      images: [project.cardImage],
+    },
   };
 }
 

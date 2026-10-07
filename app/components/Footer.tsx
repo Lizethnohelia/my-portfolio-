@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { FooterMotionLink } from "./FooterMotionLink";
 import { SiteLogo } from "./SiteLogo";
 
@@ -48,12 +47,6 @@ export default function Footer() {
           </div>
 
           <div className="flex flex-col items-start gap-3 md:items-end">
-            <Link
-              href="#"
-              className="text-body-sm font-medium text-footer-text transition-colors hover:text-primary"
-            >
-              Archive
-            </Link>
             <p className="text-body-sm text-footer-text-muted">
               © {new Date().getFullYear()} All rights reserved
             </p>
