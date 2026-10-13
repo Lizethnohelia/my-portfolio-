@@ -32,6 +32,7 @@ import { PrimaDesignSystemBentoGrid } from "./PrimaDesignSystemBentoGrid";
 import { CaseStudyProductVideoSection } from "./CaseStudyProductVideoSection";
 import { ProductPreviewMacbookScroll } from "./ProductPreviewMacbookScroll";
 import { PhoneMockupSlot } from "./PhoneMockupSlot";
+import { ZoomableVisual } from "./ZoomableVisual";
 
 /** Contenedor del case study: ancho máximo 7xl + padding moderado. */
 const CASE_STUDY_INNER = "mx-auto w-full max-w-7xl px-5 py-14 sm:px-6 md:py-16 lg:py-20";
@@ -453,9 +454,8 @@ function DesignSystemBlock({ block }: { block: CaseStudyDesignSystemSection }) {
           <PrimaDesignSystemBentoGrid grid={block.bentoGrid} />
         ) : null}
         {!block.bentoGrid && block.scrollableVisual && block.visual?.width ? (
-          <ScrollableResearchVisual
+          <ZoomableVisual
             visual={block.visual}
-            borderTone="muted"
             backgroundColor={block.scrollableVisualBackground}
           />
         ) : null}
@@ -816,7 +816,7 @@ function ChallengeBlock({
           <div className="flex min-w-0 flex-col gap-8">
             {challenge.ideation.explorations ? (
               <div className="flex flex-col gap-3">
-                <h4 className="text-left text-body-md font-semibold text-foreground">
+                <h4 className="text-left type-case-study-title font-normal text-foreground">
                   {challenge.ideation.explorations.title}
                 </h4>
                 <p className="break-words text-pretty text-body-md leading-relaxed text-muted">

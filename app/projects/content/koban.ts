@@ -330,9 +330,8 @@ const KOBAN_CASE_STUDY: ProjectCaseStudy = {
       "final UI & key features ",
       "Movements.jpg",
       "Koban: transfer flow and movements screens",
-      3805,
-      3845,
-      3805
+      12684,
+      12816
     ),
   },
   fullWidthVisual: kobanImage(
