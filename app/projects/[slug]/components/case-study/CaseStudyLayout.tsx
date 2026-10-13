@@ -1191,7 +1191,10 @@ export function ProjectCaseStudyLayout({ project }: { project: Project }) {
             />
           </CaseStudyHighlightGroup>
         ) : (
-          <TakeawaysBlock takeaways={c.takeaways} />
+          <TakeawaysBlock
+            takeaways={c.takeaways}
+            hideSubheading={project.slug === "koban"}
+          />
         )}
       </CaseStudySplitSection>
 
