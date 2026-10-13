@@ -31,6 +31,7 @@ import {
 import { PrimaDesignSystemBentoGrid } from "./PrimaDesignSystemBentoGrid";
 import { CaseStudyProductVideoSection } from "./CaseStudyProductVideoSection";
 import { ProductPreviewMacbookScroll } from "./ProductPreviewMacbookScroll";
+import { PhoneMockupSlot } from "./PhoneMockupSlot";
 
 /** Contenedor del case study: ancho máximo 7xl + padding moderado. */
 const CASE_STUDY_INNER = "mx-auto w-full max-w-7xl px-5 py-14 sm:px-6 md:py-16 lg:py-20";
@@ -290,6 +291,7 @@ function CaseStudyHeroSection({
   hero: CaseStudyHero;
 }) {
   const primaHeroMockup = Boolean(hero.macbookBrowserMedia && hero.heroImage?.src);
+  const phoneHero = hero.phoneMockups?.length ? hero.phoneMockups : null;
 
   return (
     <header className="border-b border-border bg-background px-5 pb-14 pt-8 sm:px-8 sm:pb-16 sm:pt-10 md:px-12 lg:px-16 lg:pb-20 lg:pt-14">
@@ -358,7 +360,32 @@ function CaseStudyHeroSection({
             primaHeroMockup && "flex h-full min-h-0 flex-col justify-center"
           )}
         >
-          {primaHeroMockup && hero.heroImage ? (
+          {phoneHero?.length === 1 ? (
+            <div className="flex justify-center lg:relative lg:min-h-0 lg:flex-1 lg:justify-end">
+              <PhoneMockupSlot
+                visual={phoneHero[0].visual}
+                label={phoneHero[0].label}
+                priority="high"
+                fitHeight
+                className="mx-0"
+              />
+            </div>
+          ) : phoneHero ? (
+            <div className="flex items-start justify-center gap-4 sm:gap-6 lg:justify-end">
+              {phoneHero.map((screen, index) => (
+                <PhoneMockupSlot
+                  key={screen.label}
+                  visual={screen.visual}
+                  label={screen.label}
+                  priority="high"
+                  className={cn(
+                    "mx-0 min-w-0 flex-1",
+                    index % 2 === 1 && "mt-10 sm:mt-16"
+                  )}
+                />
+              ))}
+            </div>
+          ) : primaHeroMockup && hero.heroImage ? (
             <MacbookBrowserMediaSlot
               media={{
                 kind: "image",
@@ -402,7 +429,7 @@ function DesignSystemBlock({ block }: { block: CaseStudyDesignSystemSection }) {
   const primaryLabel =
     block.primaryPlaceholderLabel ??
     "Paleta, tipografía y componentes del sistema (placeholder).";
-  const isFullWidth = Boolean(block.bentoGrid);
+  const isFullWidth = Boolean(block.bentoGrid || block.scrollableVisual);
 
   return (
     <div
@@ -425,7 +452,14 @@ function DesignSystemBlock({ block }: { block: CaseStudyDesignSystemSection }) {
         {block.bentoGrid ? (
           <PrimaDesignSystemBentoGrid grid={block.bentoGrid} />
         ) : null}
-        {!block.bentoGrid && block.visual?.src ? (
+        {!block.bentoGrid && block.scrollableVisual && block.visual?.width ? (
+          <ScrollableResearchVisual
+            visual={block.visual}
+            borderTone="muted"
+            backgroundColor={block.scrollableVisualBackground}
+          />
+        ) : null}
+        {!block.bentoGrid && !block.scrollableVisual && block.visual?.src ? (
           <CaseStudyVisualSlot
             surface="page"
             widthPreset="full"
@@ -531,6 +565,24 @@ function FeatureRow({
 }) {
   const isPrimaMockup = Boolean(feature.macbookProductPreview);
 
+  if (feature.phoneMockup) {
+    const phoneFirst = feature.imageSide === "left";
+    return (
+      <article className="grid w-full min-w-0 grid-cols-1 items-center gap-8 py-12 md:grid-cols-2 md:gap-12">
+        <div className={cn("min-w-0", phoneFirst && "md:order-2")}>
+          <FeatureCopy feature={feature} />
+        </div>
+        <div className={cn("min-w-0", phoneFirst && "md:order-1")}>
+          <PhoneMockupSlot
+            visual={feature.visual}
+            label={`${feature.title} — mobile screen.`}
+            priority={featureIndex === 0 ? "normal" : "lazy"}
+          />
+        </div>
+      </article>
+    );
+  }
+
   if (isPrimaMockup) {
     return (
       <article className="flex w-full min-w-0 flex-col gap-6 py-12 md:gap-8">
@@ -547,6 +599,49 @@ function FeatureRow({
       <FeatureVisual feature={feature} featureIndex={featureIndex} />
       <FeatureCopy feature={feature} />
     </article>
+  );
+}
+
+/**
+ * Captura grande a resolución nativa dentro de un contenedor con scroll interno
+ * (horizontal y vertical), para no reducir su resolución al ajustarla al ancho de la columna.
+ */
+function ScrollableResearchVisual({
+  visual,
+  borderTone = "default",
+  backgroundColor,
+}: {
+  visual: CaseStudyVisualAsset;
+  borderTone?: "default" | "muted";
+  /** Fondo del contenedor; igualarlo al de la imagen evita cortes visibles. */
+  backgroundColor?: string;
+}) {
+  const renderedWidth = visual.displayWidth ?? Math.round((visual.width ?? 0) / 2);
+
+  return (
+    <div
+      role="group"
+      tabIndex={0}
+      aria-label={`${visual.alt} (scrollable)`}
+      style={backgroundColor ? { backgroundColor } : undefined}
+      className={cn(
+        "max-h-[75vh] overflow-auto rounded-2xl bg-background focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
+        borderTone === "muted"
+          ? "border-case-study-research-stroke ring-1 ring-case-study-research-stroke"
+          : "border border-border ring-1 ring-border"
+      )}
+    >
+      <img
+        src={visual.src}
+        alt={visual.alt}
+        width={visual.width}
+        height={visual.height}
+        loading="lazy"
+        decoding="async"
+        style={{ width: renderedWidth }}
+        className="block h-auto min-w-full max-w-none"
+      />
+    </div>
   );
 }
 
@@ -676,7 +771,14 @@ function ChallengeBlock({
         )}
         {researchVisuals?.length ? (
           <div className="flex min-w-0 flex-col gap-4">
-            {researchVisuals.map((item, index) => (
+            {researchVisuals.map((item, index) =>
+              challenge.research.scrollWideVisuals && item.width ? (
+                <ScrollableResearchVisual
+                  key={item.src}
+                  visual={item}
+                  borderTone={challenge.research.visualSlotBorder === "muted" ? "muted" : "default"}
+                />
+              ) : (
               <CaseStudyVisualSlot
                 key={item.src}
                 surface="page"
@@ -685,7 +787,8 @@ function ChallengeBlock({
                 label={`${challenge.title} — research ${index + 1} de ${researchVisuals.length}`}
                 borderTone={challenge.research.visualSlotBorder === "muted" ? "muted" : "default"}
               />
-            ))}
+              )
+            )}
           </div>
         ) : (
           <FiveImagePlaceholders
@@ -711,7 +814,37 @@ function ChallengeBlock({
         )}
         {challenge.ideation.visuals?.length ? (
           <div className="flex min-w-0 flex-col gap-8">
-            {challenge.ideation.macbookBrowserMedia
+            {challenge.ideation.explorations ? (
+              <div className="flex flex-col gap-3">
+                <h4 className="text-left text-body-md font-semibold text-foreground">
+                  {challenge.ideation.explorations.title}
+                </h4>
+                <p className="break-words text-pretty text-body-md leading-relaxed text-muted">
+                  {challenge.ideation.explorations.body}
+                </p>
+              </div>
+            ) : null}
+            {challenge.ideation.phoneMedia ? (
+              <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
+                {challenge.ideation.visuals.map((item, index) => {
+                  const caption = challenge.ideation.visualCaptions?.[index];
+                  return (
+                    <div key={item.src} className="flex min-w-0 flex-col gap-4">
+                      <PhoneMockupSlot
+                        visual={item}
+                        label={`${challenge.title} — ideation ${index + 1}`}
+                        priority={index < 2 ? "normal" : "lazy"}
+                      />
+                      {caption ? (
+                        <p className="text-center text-body-sm font-medium text-muted">
+                          {caption}
+                        </p>
+                      ) : null}
+                    </div>
+                  );
+                })}
+              </div>
+            ) : challenge.ideation.macbookBrowserMedia
               ? challenge.ideation.visuals.map((item, index) => (
                   <MacbookBrowserMediaSlot
                     key={item.src}
@@ -770,6 +903,25 @@ function ProductPreviewBlock({ preview }: { preview: CaseStudyProductPreview }) 
   const slotWidth: CaseStudyVisualWidth = preview.slotWidthPreset ?? "iphone14";
   const isMacbook = slotWidth === "macbook-air";
   const macbookProductPreview = Boolean(isMacbook && preview.macbookProductPreviewMode);
+
+  if (preview.phoneMockupMode) {
+    return (
+      <div className="grid w-full min-w-0 max-w-full grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2">
+        {preview.slots.map((slot, index) => (
+          <figure key={slot.label} className="m-0 flex min-w-0 flex-col gap-4">
+            <PhoneMockupSlot
+              visual={slot.visual}
+              label={slot.label}
+              priority={index < 2 ? "normal" : "lazy"}
+            />
+            <figcaption className="mx-auto max-w-[17.5rem] text-center text-body-sm text-footer-text-muted">
+              {slot.label}
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    );
+  }
 
   return (
     <div
@@ -1013,7 +1165,11 @@ export function ProjectCaseStudyLayout({ project }: { project: Project }) {
       <CaseStudySplitSection
         variant="surface"
         title={c.designSystem.title}
-        layout={c.designSystem.bentoGrid ? "single" : "split"}
+        layout={
+          c.designSystem.bentoGrid || c.designSystem.scrollableVisual
+            ? "single"
+            : "split"
+        }
       >
         <DesignSystemBlock block={c.designSystem} />
       </CaseStudySplitSection>
@@ -1047,6 +1203,20 @@ export function ProjectCaseStudyLayout({ project }: { project: Project }) {
           title="STATEMENT AND ACKNOWLEDGEMENTS"
           block={c.statementAndAcknowledgements}
         />
+      ) : null}
+
+      {c.fullWidthVisual?.src ? (
+        <section className="w-full border-t border-border bg-background">
+          <img
+            src={c.fullWidthVisual.src}
+            alt={c.fullWidthVisual.alt}
+            width={c.fullWidthVisual.width}
+            height={c.fullWidthVisual.height}
+            loading="lazy"
+            decoding="async"
+            className="block h-auto w-full"
+          />
+        </section>
       ) : null}
     </>
   );
